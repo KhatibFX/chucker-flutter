@@ -1,13 +1,11 @@
 import 'package:chucker_flutter/src/helpers/extensions.dart';
-import 'package:chucker_flutter/src/helpers/shared_preferences_manager.dart';
+import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
 import 'package:chucker_flutter/src/localization/localization.dart';
-
 import 'package:chucker_flutter/src/models/settings.dart';
 import 'package:chucker_flutter/src/view/chucker_page.dart';
 import 'package:chucker_flutter/src/view/helper/chucker_button.dart';
 import 'package:chucker_flutter/src/view/helper/colors.dart';
-import 'package:chucker_flutter/src/view/widgets/notification.dart'
-    as notification;
+import 'package:chucker_flutter/src/view/widgets/notification.dart' as notification;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -32,6 +30,7 @@ class ChuckerUiHelper {
     required int statusCode,
     required String path,
     required DateTime requestTime,
+    required IStorageManager storageManager,
   }) {
     notificationShown = false;
 
@@ -61,7 +60,7 @@ ChuckerFlutter: You programmatically vetoed notification behavior. Make sure to 
     }
 
     final overlay = ChuckerFlutter.navigatorObserver.navigator!.overlay;
-    final entry = _createOverlayEntry(method, statusCode, path, requestTime);
+    final entry = _createOverlayEntry(method, statusCode, path, requestTime, storageManager);
     _overlayEntries.add(entry);
     overlay?.insert(entry);
     notificationShown = true;
@@ -73,6 +72,7 @@ ChuckerFlutter: You programmatically vetoed notification behavior. Make sure to 
     int statusCode,
     String path,
     DateTime requestTime,
+    IStorageManager storageManager,
   ) {
     return OverlayEntry(
       builder: (context) {
@@ -84,6 +84,7 @@ ChuckerFlutter: You programmatically vetoed notification behavior. Make sure to 
             path: path,
             removeNotification: _removeNotification,
             requestTime: requestTime,
+            storageManager: storageManager,
           ),
         );
       },
@@ -101,8 +102,7 @@ ChuckerFlutter: You programmatically vetoed notification behavior. Make sure to 
 
   ///[showChuckerScreen] shows the screen containing the list of recored
   ///api requests
-  static void showChuckerScreen() {
-    SharedPreferencesManager.getInstance().getSettings();
+  static void showChuckerScreen(IStorageManager storageManager) {
     ChuckerFlutter.navigatorObserver.navigator!.push(
       MaterialPageRoute<void>(
         builder: (context) => MaterialApp(
@@ -121,7 +121,7 @@ ChuckerFlutter: You programmatically vetoed notification behavior. Make sure to 
                   surface: primaryColor,
                 ),
           ),
-          home: const ChuckerPage(),
+          home: ChuckerPage(storageManager: storageManager),
         ),
       ),
     );
@@ -132,6 +132,8 @@ ChuckerFlutter: You programmatically vetoed notification behavior. Make sure to 
 ///
 ///[chuckerButton] and notifications only be visible in debug mode
 class ChuckerFlutter {
+  ChuckerFlutter();
+
   ///[navigatorObserver] observes the navigation of your app. It must be
   ///referenced in your MaterialApp widget
   static final navigatorObserver = NavigatorObserver();
@@ -149,10 +151,9 @@ class ChuckerFlutter {
   static bool showNotification = true;
 
   ///[ChuckerButton] can be placed anywhere in the UI to open Chucker Screen
-  static final chuckerButton = isDebugMode || ChuckerFlutter.showOnRelease
-      ? ChuckerButton.getInstance()
-      : const SizedBox.shrink();
+  static Widget getChuckerButton(IStorageManager storageManager) =>
+      isDebugMode || ChuckerFlutter.showOnRelease ? ChuckerButton.getInstance(storageManager) : const SizedBox.shrink();
 
   ///[showChuckerScreen] navigates to the chucker home screen
-  static void showChuckerScreen() => ChuckerUiHelper.showChuckerScreen();
+  static void showChuckerScreen(IStorageManager storageManager) => ChuckerUiHelper.showChuckerScreen(storageManager);
 }

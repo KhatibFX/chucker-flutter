@@ -1,4 +1,4 @@
-import 'package:chucker_flutter/src/helpers/shared_preferences_manager.dart';
+import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
 import 'package:chucker_flutter/src/localization/localization.dart';
 import 'package:chucker_flutter/src/models/api_response.dart';
 import 'package:chucker_flutter/src/view/api_detail_page.dart';
@@ -17,7 +17,9 @@ import 'package:flutter/material.dart';
 ///The main screen of `chucker_flutter`
 class ChuckerPage extends StatefulWidget {
   ///The main screen of `chucker_flutter`
-  const ChuckerPage({Key? key}) : super(key: key);
+  const ChuckerPage({Key? key, required this.storageManager}) : super(key: key);
+
+  final IStorageManager storageManager;
 
   @override
   State<ChuckerPage> createState() => _ChuckerPageState();
@@ -42,7 +44,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
   ];
 
   Future<void> _init() async {
-    final sharedPreferencesManager = SharedPreferencesManager.getInstance();
+    final sharedPreferencesManager = widget.storageManager.getInstance();
     _apis = await sharedPreferencesManager.getAllApiResponses();
     setState(() {});
   }
@@ -76,7 +78,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
           MenuButtons(
             enableDelete: _selectedApis.isNotEmpty,
             onDelete: _deleteAllSelected,
-            onSettings: _openSettings,
+            onSettings: () => _openSettings(widget.storageManager),
           ),
         ],
       ),
@@ -164,8 +166,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
     );
   }
 
-  int get _remaingRequests =>
-      ChuckerUiHelper.settings.apiThresholds - _apis.length;
+  int get _remaingRequests => ChuckerUiHelper.settings.apiThresholds - _apis.length;
 
   List<ApiResponse> _successApis({bool filterApply = true}) {
     final query = _query.toLowerCase();
@@ -222,7 +223,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
           false;
     }
     if (deleteConfirm) {
-      final sharedPreferencesManager = SharedPreferencesManager.getInstance();
+      final sharedPreferencesManager = widget.storageManager.getInstance();
       await sharedPreferencesManager.deleteAnApi(dateTime);
       setState(
         () => _apis.removeWhere((e) => e.requestTime.toString() == dateTime),
@@ -243,11 +244,8 @@ class _ChuckerPageState extends State<ChuckerPage> {
           false;
     }
     if (deleteConfirm) {
-      final dateTimes = _selectedApis
-          .where((e) => e.checked)
-          .map((e) => e.requestTime.toString())
-          .toList();
-      final sharedPreferencesManager = SharedPreferencesManager.getInstance();
+      final dateTimes = _selectedApis.where((e) => e.checked).map((e) => e.requestTime.toString()).toList();
+      final sharedPreferencesManager = widget.storageManager.getInstance();
       await sharedPreferencesManager.deleteSelected(dateTimes);
       setState(
         () => _apis.removeWhere(
@@ -261,9 +259,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
     setState(() {
       _apis = _apis
           .map(
-            (e) => e.requestTime.toString() == dateTime
-                ? e.copyWith(checked: !e.checked)
-                : e,
+            (e) => e.requestTime.toString() == dateTime ? e.copyWith(checked: !e.checked) : e,
           )
           .toList();
     });
@@ -284,12 +280,12 @@ class _ChuckerPageState extends State<ChuckerPage> {
     return false;
   }
 
-  void _openSettings() {
+  void _openSettings(IStorageManager storageManager) {
     ChuckerFlutter.navigatorObserver.navigator?.push(
       MaterialPageRoute<void>(
         builder: (_) => Theme(
           data: ThemeData.light(useMaterial3: false),
-          child: const SettingsPage(),
+          child: SettingsPage(storageManager: storageManager),
         ),
       ),
     );

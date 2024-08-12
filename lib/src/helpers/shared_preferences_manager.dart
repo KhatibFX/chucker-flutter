@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
 import 'package:chucker_flutter/src/localization/localization.dart';
 import 'package:chucker_flutter/src/models/api_response.dart';
 import 'package:chucker_flutter/src/models/settings.dart';
@@ -7,7 +8,7 @@ import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 ///[SharedPreferencesManager] handles storage of chucker data on user's disk
-class SharedPreferencesManager {
+class SharedPreferencesManager implements IStorageManager {
   SharedPreferencesManager._(bool initData) {
     if (initData) {
       getSettings();
@@ -18,7 +19,7 @@ class SharedPreferencesManager {
 
   ///[getInstance] returns the singleton object of [SharedPreferencesManager]
   // ignore: prefer_constructors_over_static_methods
-  static SharedPreferencesManager getInstance({bool initData = true}) {
+  IStorageManager getInstance({bool initData = true}) {
     return _sharedPreferencesManager ??= SharedPreferencesManager._(initData);
   }
 
@@ -26,6 +27,7 @@ class SharedPreferencesManager {
   static const String _kSettings = 'chucker_settings';
 
   ///[addApiResponse] sets an API response to local disk
+  @override
   Future<void> addApiResponse(ApiResponse apiResponse) async {
     final newResponses = List<ApiResponse>.empty(growable: true);
 
@@ -47,6 +49,7 @@ class SharedPreferencesManager {
   }
 
   ///[getAllApiResponses] returns all api responses saved in local disk
+  @override
   Future<List<ApiResponse>> getAllApiResponses() async {
     final apiResponses = List<ApiResponse>.empty(growable: true);
 
@@ -69,6 +72,7 @@ class SharedPreferencesManager {
   }
 
   ///[deleteAnApi] deletes an api record from local disk
+  @override
   Future<void> deleteAnApi(String dateTime) async {
     final apis = await getAllApiResponses();
     apis.removeWhere((e) => e.requestTime.toString() == dateTime);
@@ -82,6 +86,7 @@ class SharedPreferencesManager {
   }
 
   ///[deleteAnApi] deletes an api record from local disk
+  @override
   Future<void> deleteSelected(List<String> dateTimes) async {
     final apis = await getAllApiResponses();
     apis.removeWhere((e) => dateTimes.contains(e.requestTime.toString()));
@@ -95,6 +100,7 @@ class SharedPreferencesManager {
   }
 
   ///[setSettings] saves the chucker settings in user's disk
+  @override
   Future<void> setSettings(Settings settings) async {
     final preferences = await SharedPreferences.getInstance();
 
@@ -107,6 +113,7 @@ class SharedPreferencesManager {
   }
 
   ///[getSettings] gets the chucker settings from user's disk
+  @override
   Future<Settings> getSettings() async {
     final preferences = await SharedPreferences.getInstance();
 
@@ -128,6 +135,7 @@ class SharedPreferencesManager {
   }
 
   ///[getAllApiResponses] returns single api response at given time
+  @override
   Future<ApiResponse> getApiResponse(DateTime time) async {
     final apiResponses = List<ApiResponse>.empty(growable: true);
 
