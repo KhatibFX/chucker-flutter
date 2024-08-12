@@ -57,7 +57,7 @@ class ChuckerHttpClient extends BaseClient {
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
     _requestTime = DateTime.now();
-    await _storageManager.getInstance().getSettings();
+    await _storageManager.getSettings();
 
     final interceptedRequest = onRequest(request);
 
@@ -120,7 +120,7 @@ class ChuckerHttpClient extends BaseClient {
       // ignore: empty_catches
     } catch (e) {}
 
-    await _storageManager.getInstance().addApiResponse(
+    await _storageManager.addApiResponse(
           ApiResponse(
             body: responseBody,
             path: request.url.path,

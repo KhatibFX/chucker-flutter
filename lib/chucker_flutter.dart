@@ -8,7 +8,6 @@ export 'src/interceptors/dio_interceptor.dart';
 export 'src/interceptors/http_logging_interceptor.dart';
 export 'src/view/helper/chucker_ui_helper.dart' show ChuckerFlutter;
 export 'src/helpers/i_storage_manager.dart';
-export 'src/helpers/shared_preferences_manager.dart';
 export 'src/helpers/isar_manager.dart';
 
 

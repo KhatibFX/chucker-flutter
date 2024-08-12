@@ -16,7 +16,7 @@ class ChuckerChopperInterceptor implements ResponseInterceptor {
   @override
   FutureOr<Response<dynamic>> onResponse(Response<dynamic> response) async {
     final time = DateTime.now();
-    await _storageManager.getInstance().getSettings();
+    await _storageManager.getSettings();
 
     if (ChuckerFlutter.isDebugMode || ChuckerFlutter.showOnRelease) {
       ChuckerUiHelper.showNotification(
@@ -40,7 +40,7 @@ class ChuckerChopperInterceptor implements ResponseInterceptor {
       // ignore: empty_catches
     } catch (e) {}
 
-    await _storageManager.getInstance().addApiResponse(
+    await _storageManager.addApiResponse(
           ApiResponse(
             body: responseBody,
             path: response.base.request?.url.path ?? emptyString,

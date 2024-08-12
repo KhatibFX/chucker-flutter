@@ -26,7 +26,7 @@ class ChuckerDioInterceptor extends Interceptor {
     Response<dynamic> response,
     ResponseInterceptorHandler handler,
   ) async {
-    await _storageManager.getInstance().getSettings();
+    await _storageManager.getSettings();
 
     if (!ChuckerFlutter.isDebugMode && !ChuckerFlutter.showOnRelease) {
       handler.next(response);
@@ -56,7 +56,7 @@ class ChuckerDioInterceptor extends Interceptor {
     DioError err,
     ErrorInterceptorHandler handler,
   ) async {
-    await _storageManager.getInstance().getSettings();
+    await _storageManager.getSettings();
 
     if (!ChuckerFlutter.isDebugMode && !ChuckerFlutter.showOnRelease) {
       handler.next(err);
@@ -80,7 +80,7 @@ class ChuckerDioInterceptor extends Interceptor {
   }
 
   Future<void> _saveResponse(Response<dynamic> response) async {
-    await _storageManager.getInstance().addApiResponse(
+    await _storageManager.addApiResponse(
           ApiResponse(
             body: response.data,
             path: response.requestOptions.path,
@@ -114,7 +114,7 @@ class ChuckerDioInterceptor extends Interceptor {
   }
 
   Future<void> _saveError(DioError response) async {
-    await _storageManager.getInstance().addApiResponse(
+    await _storageManager.addApiResponse(
           ApiResponse(
             body: _getJson(response.response.toString()),
             path: response.requestOptions.path,

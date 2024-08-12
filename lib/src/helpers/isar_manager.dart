@@ -3,9 +3,10 @@ import 'package:chucker_flutter/src/models/api_response.dart';
 import 'package:chucker_flutter/src/models/settings.dart';
 
 class IsarManager implements IStorageManager {
+
   @override
-  IStorageManager getInstance({bool initData = true}) {
-    // TODO: implement getInstance
+  Future<void> init() {
+    // TODO: implement init
     throw UnimplementedError();
   }
 

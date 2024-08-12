@@ -44,7 +44,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
   ];
 
   Future<void> _init() async {
-    final sharedPreferencesManager = widget.storageManager.getInstance();
+    final sharedPreferencesManager = widget.storageManager;
     _apis = await sharedPreferencesManager.getAllApiResponses();
     setState(() {});
   }
@@ -223,7 +223,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
           false;
     }
     if (deleteConfirm) {
-      final sharedPreferencesManager = widget.storageManager.getInstance();
+      final sharedPreferencesManager = widget.storageManager;
       await sharedPreferencesManager.deleteAnApi(dateTime);
       setState(
         () => _apis.removeWhere((e) => e.requestTime.toString() == dateTime),
@@ -245,7 +245,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
     }
     if (deleteConfirm) {
       final dateTimes = _selectedApis.where((e) => e.checked).map((e) => e.requestTime.toString()).toList();
-      final sharedPreferencesManager = widget.storageManager.getInstance();
+      final sharedPreferencesManager = widget.storageManager;
       await sharedPreferencesManager.deleteSelected(dateTimes);
       setState(
         () => _apis.removeWhere(

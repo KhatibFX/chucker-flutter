@@ -205,7 +205,7 @@ class _SettingsPageState extends State<SettingsPage> {
       showDeleteConfirmDialog: showDeleteConfirmDialog,
       language: language,
     );
-    storageManager.getInstance().setSettings(_settings);
+    storageManager.setSettings(_settings);
     setState(() {});
   }
 

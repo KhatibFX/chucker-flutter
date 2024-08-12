@@ -157,7 +157,7 @@ class _NotificationState extends State<Notification> with SingleTickerProviderSt
   }
 
   Future<void> _openDetails(IStorageManager storageManager) async {
-    final api = await storageManager.getInstance().getApiResponse(
+    final api = await storageManager.getApiResponse(
           widget.requestTime,
         );
     await ChuckerFlutter.navigatorObserver.navigator?.push(
