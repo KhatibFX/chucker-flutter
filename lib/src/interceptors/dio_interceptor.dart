@@ -53,7 +53,7 @@ class ChuckerDioInterceptor extends Interceptor {
 
   @override
   Future<void> onError(
-    DioException err,
+    DioError err,
     ErrorInterceptorHandler handler,
   ) async {
     await _storageManager.getInstance().getSettings();
@@ -87,18 +87,18 @@ class ChuckerDioInterceptor extends Interceptor {
             baseUrl: response.requestOptions.baseUrl,
             method: response.requestOptions.method,
             statusCode: response.statusCode ?? -1,
-            connectionTimeout: response.requestOptions.connectTimeout?.inMilliseconds ?? 0,
+            connectionTimeout: response.requestOptions.connectTimeout,
             contentType: response.requestOptions.contentType,
             headers: response.requestOptions.headers.toString(),
             queryParameters: response.requestOptions.queryParameters.toString(),
-            receiveTimeout: response.requestOptions.receiveTimeout?.inMilliseconds ?? 0,
+            receiveTimeout: response.requestOptions.receiveTimeout,
             request: _separateFileObjects(response.requestOptions).data,
             requestSize: 2,
             requestTime: _requestTime,
             responseSize: 2,
             responseTime: DateTime.now(),
             responseType: response.requestOptions.responseType.name,
-            sendTimeout: response.requestOptions.sendTimeout?.inMilliseconds ?? 0,
+            sendTimeout: response.requestOptions.sendTimeout,
             checked: false,
             clientLibrary: 'Dio',
           ),
@@ -113,7 +113,7 @@ class ChuckerDioInterceptor extends Interceptor {
     }
   }
 
-  Future<void> _saveError(DioException response) async {
+  Future<void> _saveError(DioError response) async {
     await _storageManager.getInstance().addApiResponse(
           ApiResponse(
             body: _getJson(response.response.toString()),
@@ -121,18 +121,18 @@ class ChuckerDioInterceptor extends Interceptor {
             baseUrl: response.requestOptions.baseUrl,
             method: response.requestOptions.method,
             statusCode: response.response?.statusCode ?? -1,
-            connectionTimeout: response.requestOptions.connectTimeout?.inMilliseconds ?? 0,
+            connectionTimeout: response.requestOptions.connectTimeout,
             contentType: response.requestOptions.contentType,
             headers: response.requestOptions.headers.toString(),
             queryParameters: response.requestOptions.queryParameters.toString(),
-            receiveTimeout: response.requestOptions.receiveTimeout?.inMilliseconds ?? 0,
+            receiveTimeout: response.requestOptions.receiveTimeout,
             request: _separateFileObjects(response.requestOptions).data,
             requestSize: 2,
             requestTime: _requestTime,
             responseSize: 2,
             responseTime: DateTime.now(),
             responseType: response.requestOptions.responseType.name,
-            sendTimeout: response.requestOptions.sendTimeout?.inMilliseconds ?? 0,
+            sendTimeout: response.requestOptions.sendTimeout,
             checked: false,
             clientLibrary: 'Dio',
           ),
