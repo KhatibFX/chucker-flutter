@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'shared_preferences_manager.dart';
 
 abstract class IStorageManager {
-  static const IStorageManager sharedPreferencesManager =  const _SharedPreferencesManager();
   Future<void> init();
   Future<void> addApiResponse(ApiResponse apiResponse);
   Future<List<ApiResponse>> getAllApiResponses();

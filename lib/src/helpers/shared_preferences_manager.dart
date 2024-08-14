@@ -3,25 +3,23 @@
 part of 'i_storage_manager.dart';
 
 ///[SharedPreferencesManager] handles storage of chucker data on user's disk
-class _SharedPreferencesManager implements IStorageManager {
-  const _SharedPreferencesManager();
-  _SharedPreferencesManager._(bool initData) {
+class SharedPreferencesManager implements IStorageManager {
+  SharedPreferencesManager._(bool initData) {
     if (initData) {
       getSettings();
     }
   }
 
-  static _SharedPreferencesManager? _sharedPreferencesManager;
+  static final SharedPreferencesManager _sharedPreferencesManager = SharedPreferencesManager._(true);
+
+  factory SharedPreferencesManager() {
+    return _sharedPreferencesManager;
+  }
+
 
   @override
   Future<void> init() async {
     await getSettings();
-  }
-
-  ///[getInstance] returns the singleton object of [SharedPreferencesManager]
-  // ignore: prefer_constructors_over_static_methods
-  static IStorageManager getInstance({bool initData = true}) {
-    return _sharedPreferencesManager ??= _SharedPreferencesManager._(initData);
   }
 
   static const String _kApiResponses = 'api_responses';
