@@ -37,7 +37,7 @@ class _LanguagesMenuState extends State<LanguagesMenu> {
     );
   }
 
-  PopupMenuEntry<dynamic> _radioButton(Language language) {
+  PopupMenuEntry _radioButton(Language language) {
     return PopupMenuItem(
       onTap: () {
         widget.onSelect(language);

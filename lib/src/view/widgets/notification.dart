@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:chucker_flutter/src/helpers/extensions.dart';
-import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
+import 'package:chucker_flutter/src/helpers/shared_preferences_manager.dart';
 import 'package:chucker_flutter/src/localization/localization.dart';
 import 'package:chucker_flutter/src/view/api_detail_page.dart';
 import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 class Notification extends StatefulWidget {
   ///Notification widget showing in overlay notification
   const Notification({
-    required this.storageManager,
     required this.statusCode,
     required this.method,
     required this.path,
@@ -21,8 +20,6 @@ class Notification extends StatefulWidget {
     required this.requestTime,
     Key? key,
   }) : super(key: key);
-
-  final IStorageManager storageManager;
 
   ///method of request
   final String method;
@@ -43,7 +40,8 @@ class Notification extends StatefulWidget {
   State<Notification> createState() => _NotificationState();
 }
 
-class _NotificationState extends State<Notification> with SingleTickerProviderStateMixin {
+class _NotificationState extends State<Notification>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: ChuckerUiHelper.settings.duration,
     vsync: this,
@@ -68,7 +66,8 @@ class _NotificationState extends State<Notification> with SingleTickerProviderSt
 
     _controller.addListener(
       () {
-        if (_controller.status == AnimationStatus.completed || _controller.status == AnimationStatus.dismissed) {
+        if (_controller.status == AnimationStatus.completed ||
+            _controller.status == AnimationStatus.dismissed) {
           widget.removeNotification();
         }
       },
@@ -117,7 +116,7 @@ class _NotificationState extends State<Notification> with SingleTickerProviderSt
                   Text(
                     widget.statusCode.toString(),
                     textAlign: TextAlign.center,
-                    style: context.textTheme.bodyLarge!.toBold(),
+                    style: context.textTheme.bodyText1!.toBold(),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -127,12 +126,14 @@ class _NotificationState extends State<Notification> with SingleTickerProviderSt
                       children: [
                         Text(
                           widget.method.toUpperCase(),
-                          style: context.textTheme.bodyMedium!.toBold().withColor(methodColor(widget.method)),
+                          style: context.textTheme.bodyText2!
+                              .toBold()
+                              .withColor(methodColor(widget.method)),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           widget.path,
-                          style: context.textTheme.bodySmall,
+                          style: context.textTheme.caption,
                         ),
                       ],
                     ),
@@ -141,12 +142,12 @@ class _NotificationState extends State<Notification> with SingleTickerProviderSt
                   PrimaryButton(
                     onPressed: () {
                       _controller.animateTo(0);
-                      ChuckerUiHelper.showChuckerScreen(widget.storageManager);
-                      _openDetails(widget.storageManager);
+                      ChuckerUiHelper.showChuckerScreen();
+                      _openDetails();
                     },
                     text: Localization.strings['details']!,
                     foreColor: Colors.white,
-                  ),
+                  )
                 ],
               ),
             ),
@@ -156,17 +157,12 @@ class _NotificationState extends State<Notification> with SingleTickerProviderSt
     );
   }
 
-  Future<void> _openDetails(IStorageManager storageManager) async {
-    final api = await storageManager.getApiResponse(
-          widget.requestTime,
-        );
+  Future<void> _openDetails() async {
+    final api = await SharedPreferencesManager().getApiResponse(
+      widget.requestTime,
+    );
     await ChuckerFlutter.navigatorObserver.navigator?.push(
-      MaterialPageRoute<dynamic>(
-        builder: (_) => Theme(
-          data: ThemeData.light(useMaterial3: false),
-          child: ApiDetailsPage(api: api),
-        ),
-      ),
+      MaterialPageRoute(builder: (_) => ApiDetailsPage(api: api)),
     );
   }
 

@@ -1,4 +1,4 @@
-import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
+import 'package:chucker_flutter/src/helpers/shared_preferences_manager.dart';
 import 'package:chucker_flutter/src/localization/localization.dart';
 import 'package:chucker_flutter/src/models/api_response.dart';
 import 'package:chucker_flutter/src/view/api_detail_page.dart';
@@ -17,9 +17,7 @@ import 'package:flutter/material.dart';
 ///The main screen of `chucker_flutter`
 class ChuckerPage extends StatefulWidget {
   ///The main screen of `chucker_flutter`
-  const ChuckerPage({Key? key, required this.storageManager}) : super(key: key);
-
-  final IStorageManager storageManager;
+  const ChuckerPage({Key? key}) : super(key: key);
 
   @override
   State<ChuckerPage> createState() => _ChuckerPageState();
@@ -44,7 +42,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
   ];
 
   Future<void> _init() async {
-    final sharedPreferencesManager = widget.storageManager;
+    final sharedPreferencesManager = SharedPreferencesManager();
     _apis = await sharedPreferencesManager.getAllApiResponses();
     setState(() {});
   }
@@ -78,7 +76,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
           MenuButtons(
             enableDelete: _selectedApis.isNotEmpty,
             onDelete: _deleteAllSelected,
-            onSettings: () => _openSettings(widget.storageManager),
+            onSettings: _openSettings,
           ),
         ],
       ),
@@ -166,7 +164,8 @@ class _ChuckerPageState extends State<ChuckerPage> {
     );
   }
 
-  int get _remaingRequests => ChuckerUiHelper.settings.apiThresholds - _apis.length;
+  int get _remaingRequests =>
+      ChuckerUiHelper.settings.apiThresholds - _apis.length;
 
   List<ApiResponse> _successApis({bool filterApply = true}) {
     final query = _query.toLowerCase();
@@ -223,7 +222,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
           false;
     }
     if (deleteConfirm) {
-      final sharedPreferencesManager = widget.storageManager;
+      final sharedPreferencesManager = SharedPreferencesManager();
       await sharedPreferencesManager.deleteAnApi(dateTime);
       setState(
         () => _apis.removeWhere((e) => e.requestTime.toString() == dateTime),
@@ -244,8 +243,11 @@ class _ChuckerPageState extends State<ChuckerPage> {
           false;
     }
     if (deleteConfirm) {
-      final dateTimes = _selectedApis.where((e) => e.checked).map((e) => e.requestTime.toString()).toList();
-      final sharedPreferencesManager = widget.storageManager;
+      final dateTimes = _selectedApis
+          .where((e) => e.checked)
+          .map((e) => e.requestTime.toString())
+          .toList();
+      final sharedPreferencesManager = SharedPreferencesManager();
       await sharedPreferencesManager.deleteSelected(dateTimes);
       setState(
         () => _apis.removeWhere(
@@ -259,7 +261,9 @@ class _ChuckerPageState extends State<ChuckerPage> {
     setState(() {
       _apis = _apis
           .map(
-            (e) => e.requestTime.toString() == dateTime ? e.copyWith(checked: !e.checked) : e,
+            (e) => e.requestTime.toString() == dateTime
+                ? e.copyWith(checked: !e.checked)
+                : e,
           )
           .toList();
     });
@@ -280,25 +284,15 @@ class _ChuckerPageState extends State<ChuckerPage> {
     return false;
   }
 
-  void _openSettings(IStorageManager storageManager) {
+  void _openSettings() {
     ChuckerFlutter.navigatorObserver.navigator?.push(
-      MaterialPageRoute<void>(
-        builder: (_) => Theme(
-          data: ThemeData.light(useMaterial3: false),
-          child: SettingsPage(storageManager: storageManager),
-        ),
-      ),
+      MaterialPageRoute(builder: (_) => const SettingsPage()),
     );
   }
 
   void _openDetails(ApiResponse api) {
     ChuckerFlutter.navigatorObserver.navigator?.push(
-      MaterialPageRoute<void>(
-        builder: (_) => Theme(
-          data: ThemeData.light(useMaterial3: false),
-          child: ApiDetailsPage(api: api),
-        ),
-      ),
+      MaterialPageRoute(builder: (_) => ApiDetailsPage(api: api)),
     );
   }
 }

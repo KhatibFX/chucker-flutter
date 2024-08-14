@@ -1,32 +1,29 @@
+import 'dart:convert';
 
-
-part of 'i_storage_manager.dart';
+import 'package:chucker_flutter/src/localization/localization.dart';
+import 'package:chucker_flutter/src/models/api_response.dart';
+import 'package:chucker_flutter/src/models/settings.dart';
+import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 ///[SharedPreferencesManager] handles storage of chucker data on user's disk
-class SharedPreferencesManager implements IStorageManager {
-  SharedPreferencesManager._(bool initData) {
-    if (initData) {
-      getSettings();
-    }
+class SharedPreferencesManager {
+  SharedPreferencesManager._() {
+    getSettings();
   }
 
-  static final SharedPreferencesManager _sharedPreferencesManager = SharedPreferencesManager._(true);
+  static SharedPreferencesManager? _sharedPreferencesManager;
 
+  ///[getInstance] returns the singleton object of [SharedPreferencesManager]
+  // ignore: prefer_constructors_over_static_methods
   factory SharedPreferencesManager() {
-    return _sharedPreferencesManager;
-  }
-
-
-  @override
-  Future<void> init() async {
-    await getSettings();
+    return _sharedPreferencesManager ??= SharedPreferencesManager._();
   }
 
   static const String _kApiResponses = 'api_responses';
   static const String _kSettings = 'chucker_settings';
 
   ///[addApiResponse] sets an API response to local disk
-  @override
   Future<void> addApiResponse(ApiResponse apiResponse) async {
     final newResponses = List<ApiResponse>.empty(growable: true);
 
@@ -48,7 +45,6 @@ class SharedPreferencesManager implements IStorageManager {
   }
 
   ///[getAllApiResponses] returns all api responses saved in local disk
-  @override
   Future<List<ApiResponse>> getAllApiResponses() async {
     final apiResponses = List<ApiResponse>.empty(growable: true);
 
@@ -60,7 +56,7 @@ class SharedPreferencesManager implements IStorageManager {
       return apiResponses;
     }
 
-    final list = jsonDecode(json) as List<dynamic>;
+    final list = jsonDecode(json);
 
     for (final item in list) {
       apiResponses.add(ApiResponse.fromJson(item as Map<String, dynamic>));
@@ -71,7 +67,6 @@ class SharedPreferencesManager implements IStorageManager {
   }
 
   ///[deleteAnApi] deletes an api record from local disk
-  @override
   Future<void> deleteAnApi(String dateTime) async {
     final apis = await getAllApiResponses();
     apis.removeWhere((e) => e.requestTime.toString() == dateTime);
@@ -85,7 +80,6 @@ class SharedPreferencesManager implements IStorageManager {
   }
 
   ///[deleteAnApi] deletes an api record from local disk
-  @override
   Future<void> deleteSelected(List<String> dateTimes) async {
     final apis = await getAllApiResponses();
     apis.removeWhere((e) => dateTimes.contains(e.requestTime.toString()));
@@ -99,7 +93,6 @@ class SharedPreferencesManager implements IStorageManager {
   }
 
   ///[setSettings] saves the chucker settings in user's disk
-  @override
   Future<void> setSettings(Settings settings) async {
     final preferences = await SharedPreferences.getInstance();
 
@@ -112,7 +105,6 @@ class SharedPreferencesManager implements IStorageManager {
   }
 
   ///[getSettings] gets the chucker settings from user's disk
-  @override
   Future<Settings> getSettings() async {
     final preferences = await SharedPreferences.getInstance();
 
@@ -134,7 +126,6 @@ class SharedPreferencesManager implements IStorageManager {
   }
 
   ///[getAllApiResponses] returns single api response at given time
-  @override
   Future<ApiResponse> getApiResponse(DateTime time) async {
     final apiResponses = List<ApiResponse>.empty(growable: true);
 
@@ -146,7 +137,7 @@ class SharedPreferencesManager implements IStorageManager {
       return ApiResponse.mock();
     }
 
-    final list = jsonDecode(json) as List<dynamic>;
+    final list = jsonDecode(json);
 
     for (final item in list) {
       apiResponses.add(ApiResponse.fromJson(item as Map<String, dynamic>));

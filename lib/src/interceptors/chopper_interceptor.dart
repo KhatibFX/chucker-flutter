@@ -1,22 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:chopper/chopper.dart';
 import 'package:chucker_flutter/src/helpers/constants.dart';
-import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
+import 'package:chucker_flutter/src/helpers/shared_preferences_manager.dart';
 import 'package:chucker_flutter/src/models/api_response.dart';
 import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
 import 'package:http/http.dart' as http;
 
 ///[ChuckerChopperInterceptor] adds support for `chucker_flutter` in Chopper
-class ChuckerChopperInterceptor implements ResponseInterceptor {
-  ChuckerChopperInterceptor(this._storageManager);
-  final IStorageManager _storageManager;
+class ChuckerChopperInterceptor extends ResponseInterceptor {
   @override
-  FutureOr<Response<dynamic>> onResponse(Response<dynamic> response) async {
+  FutureOr<Response> onResponse(Response response) async {
     final time = DateTime.now();
-    await _storageManager.getSettings();
+    await SharedPreferencesManager().getSettings();
 
     if (ChuckerFlutter.isDebugMode || ChuckerFlutter.showOnRelease) {
       ChuckerUiHelper.showNotification(
@@ -24,14 +21,13 @@ class ChuckerChopperInterceptor implements ResponseInterceptor {
         statusCode: response.statusCode,
         path: response.base.request?.url.path ?? '',
         requestTime: time,
-        storageManager: _storageManager,
       );
       await _saveResponse(response, time);
     }
     return response;
   }
 
-  Future<void> _saveResponse(Response<dynamic> response, DateTime time) async {
+  Future<void> _saveResponse(Response response, DateTime time) async {
     dynamic responseBody = '';
 
     try {
@@ -40,47 +36,44 @@ class ChuckerChopperInterceptor implements ResponseInterceptor {
       // ignore: empty_catches
     } catch (e) {}
 
-    await _storageManager.addApiResponse(
-          ApiResponse(
-            body: responseBody,
-            path: response.base.request?.url.path ?? emptyString,
-            baseUrl: response.base.request?.url.origin ?? emptyString,
-            method: response.base.request?.method ?? emptyString,
-            statusCode: response.statusCode,
-            connectionTimeout: 0,
-            contentType: _requestType(response),
-            headers: response.base.headers.toString(),
-            queryParameters: response.base.request?.url.queryParameters.toString() ?? emptyString,
-            receiveTimeout: 0,
-            request: _requestBody(response),
-            requestSize: 2,
-            requestTime: time,
-            responseSize: 2,
-            responseTime: DateTime.now(),
-            responseType: response.base.headers['content-type'] ?? 'N/A',
-            sendTimeout: 0,
-            checked: false,
-            clientLibrary: 'Chopper',
-          ),
-        );
-
-    final method = response.base.request?.method ?? '';
-    final statusCode = response.statusCode;
-    final path = response.base.request?.url.path ?? '';
-
-    log('ChuckerFlutter: $method:$path($statusCode) saved.');
+    await SharedPreferencesManager().addApiResponse(
+      ApiResponse(
+        body: {'data': responseBody},
+        path: response.base.request?.url.path ?? emptyString,
+        baseUrl: response.base.request?.url.origin ?? emptyString,
+        method: response.base.request?.method ?? emptyString,
+        statusCode: response.statusCode,
+        connectionTimeout: 0,
+        contentType: _requestType(response),
+        headers: response.base.headers.toString(),
+        queryParameters:
+            response.base.request?.url.queryParameters.toString() ??
+                emptyString,
+        receiveTimeout: 0,
+        request: {'request': _requestBody(response)},
+        requestSize: 2,
+        requestTime: time,
+        responseSize: 2,
+        responseTime: DateTime.now(),
+        responseType: response.base.headers['content-type'] ?? 'N/A',
+        sendTimeout: 0,
+        checked: false,
+        clientLibrary: 'Chopper',
+      ),
+    );
   }
 
-  String _requestType(Response<dynamic> response) {
-    final contentTypes = response.base.request?.headers.entries.where((element) => element.key == 'content-type');
+  String _requestType(Response response) {
+    final contentTypes = response.base.request!.headers.entries
+        .where((element) => element.key == 'content-type');
 
-    return contentTypes?.isEmpty ?? false ? 'N/A' : contentTypes?.first.value ?? '';
+    return contentTypes.isEmpty ? 'N/A' : contentTypes.first.value;
   }
 
-  dynamic _requestBody(Response<dynamic> response) {
+  dynamic _requestBody(Response response) {
     if (response.base.request is http.MultipartRequest) {
       return _separateFileObjects(
-        response.base.request as http.MultipartRequest?,
+        response.base.request! as http.MultipartRequest,
       );
     }
 
@@ -98,14 +91,14 @@ class ChuckerChopperInterceptor implements ResponseInterceptor {
     } catch (e) {}
   }
 
-  dynamic _separateFileObjects(http.MultipartRequest? request) {
-    if (request == null) return emptyString;
-    final formFields = request.fields.entries.map((e) => {e.key: e.value}).toList()
-      ..addAll(
-        request.files.map(
-          (e) => {e.field: e.filename ?? emptyString},
-        ),
-      );
+  dynamic _separateFileObjects(http.MultipartRequest request) {
+    final formFields =
+        request.fields.entries.map((e) => {e.key: e.value}).toList()
+          ..addAll(
+            request.files.map(
+              (e) => {e.field: e.filename ?? emptyString},
+            ),
+          );
     return formFields;
   }
 }

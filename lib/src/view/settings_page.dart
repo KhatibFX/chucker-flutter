@@ -1,6 +1,6 @@
 import 'package:chucker_flutter/src/helpers/constants.dart';
 import 'package:chucker_flutter/src/helpers/extensions.dart';
-import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
+import 'package:chucker_flutter/src/helpers/shared_preferences_manager.dart';
 import 'package:chucker_flutter/src/localization/localization.dart';
 import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
 import 'package:chucker_flutter/src/view/helper/colors.dart';
@@ -15,9 +15,7 @@ import 'package:flutter/material.dart';
 ///Chucker Flutter Settings
 class SettingsPage extends StatefulWidget {
   ///Chucker Flutter Settings
-  const SettingsPage({Key? key, required this.storageManager}) : super(key: key);
-
-  final IStorageManager storageManager;
+  const SettingsPage({Key? key}) : super(key: key);
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -48,7 +46,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   activeColor: primaryColor,
                   value: _settings.showNotification,
                   onChanged: (value) {
-                    _saveSettings(showNotification: value, storageManager: widget.storageManager);
+                    _saveSettings(showNotification: value);
                   },
                 ),
               ),
@@ -56,7 +54,8 @@ class _SettingsPageState extends State<SettingsPage> {
               _settingRow(
                 title: Localization.strings['duration']!,
                 description: Localization.strings['durationSettingDesc']!,
-                helperText: '''${_settings.duration.inSeconds} ${Localization.strings['seconds']}''',
+                helperText:
+                    '''${_settings.duration.inSeconds} ${Localization.strings['seconds']}''',
                 child: Slider.adaptive(
                   min: 2,
                   max: 10,
@@ -65,7 +64,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   label: _settings.duration.inSeconds.toString(),
                   value: _settings.duration.inSeconds.toDouble(),
                   onChanged: (value) {
-                    _saveSettings(duration: Duration(seconds: value.toInt()), storageManager: widget.storageManager);
+                    _saveSettings(duration: Duration(seconds: value.toInt()));
                   },
                 ),
               ),
@@ -77,7 +76,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   notificationAlignment: _settings.notificationAlignment,
                   title: _getAlignmentMenuTitle(),
                   onSelect: (alignment) {
-                    _saveSettings(notificationAlignment: alignment, storageManager: widget.storageManager);
+                    _saveSettings(notificationAlignment: alignment);
                   },
                 ),
                 padding: 16,
@@ -95,7 +94,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: HttpMethodsMenu(
                   httpMethod: _settings.httpMethod,
                   onFilter: (method) {
-                    _saveSettings(httpMethod: method, storageManager: widget.storageManager);
+                    _saveSettings(httpMethod: method);
                   },
                 ),
                 padding: 16,
@@ -108,7 +107,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   activeColor: primaryColor,
                   value: _settings.showRequestsStats,
                   onChanged: (value) {
-                    _saveSettings(showRequestsStats: value, storageManager: widget.storageManager);
+                    _saveSettings(showRequestsStats: value);
                   },
                 ),
               ),
@@ -120,7 +119,8 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(height: 16),
               _settingRow(
                 title: Localization.strings['threshold']!,
-                helperText: '''${_settings.apiThresholds} ${Localization.strings['apis']}''',
+                helperText:
+                    '''${_settings.apiThresholds} ${Localization.strings['apis']}''',
                 description: Localization.strings['apiSettingDesc']!,
                 importantInfo: Localization.strings['apiSettingsImpInfo'],
                 child: Slider.adaptive(
@@ -131,7 +131,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   label: _settings.apiThresholds.toString(),
                   value: _settings.apiThresholds.toDouble(),
                   onChanged: (value) {
-                    _saveSettings(apiThresholds: value.toInt(), storageManager: widget.storageManager);
+                    _saveSettings(apiThresholds: value.toInt());
                   },
                 ),
               ),
@@ -148,7 +148,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   activeColor: primaryColor,
                   value: _settings.showDeleteConfirmDialog,
                   onChanged: (value) {
-                    _saveSettings(showDeleteConfirmDialog: value, storageManager: widget.storageManager);
+                    _saveSettings(showDeleteConfirmDialog: value);
                   },
                 ),
               ),
@@ -164,7 +164,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: LanguagesMenu(
                   language: _settings.language,
                   onSelect: (language) {
-                    _saveSettings(language: language, storageManager: widget.storageManager);
+                    _saveSettings(language: language);
                   },
                 ),
                 padding: 16,
@@ -177,20 +177,20 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  void _saveSettings(
-      {Duration? duration,
-      double? positionTop,
-      double? positionBottom,
-      double? positionRight,
-      double? positionLeft,
-      Alignment? notificationAlignment,
-      int? apiThresholds,
-      HttpMethod? httpMethod,
-      bool? showRequestsStats,
-      bool? showNotification,
-      bool? showDeleteConfirmDialog,
-      Language? language,
-      required IStorageManager storageManager}) {
+  void _saveSettings({
+    Duration? duration,
+    double? positionTop,
+    double? positionBottom,
+    double? positionRight,
+    double? positionLeft,
+    Alignment? notificationAlignment,
+    int? apiThresholds,
+    HttpMethod? httpMethod,
+    bool? showRequestsStats,
+    bool? showNotification,
+    bool? showDeleteConfirmDialog,
+    Language? language,
+  }) {
     _settings = _settings.copyWith(
       duration: duration,
       positionBottom: positionBottom,
@@ -205,7 +205,7 @@ class _SettingsPageState extends State<SettingsPage> {
       showDeleteConfirmDialog: showDeleteConfirmDialog,
       language: language,
     );
-    storageManager.setSettings(_settings);
+    SharedPreferencesManager().setSettings(_settings);
     setState(() {});
   }
 
@@ -251,12 +251,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   Text(
                     title,
-                    style: context.textTheme.bodyMedium,
+                    style: context.textTheme.bodyText2,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     description,
-                    style: context.textTheme.bodySmall,
+                    style: context.textTheme.caption,
                   ),
                   Visibility(
                     visible: helperText != null,
@@ -266,7 +266,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     visible: helperText != null,
                     child: Text(
                       '${Localization.strings['currentValue']} $helperText',
-                      style: context.textTheme.bodySmall!.toBold(),
+                      style: context.textTheme.caption!.toBold(),
                     ),
                   ),
                 ],
@@ -297,7 +297,9 @@ class _SettingsPageState extends State<SettingsPage> {
               Expanded(
                 child: Text(
                   importantInfo ?? emptyString,
-                  style: context.textTheme.bodySmall!.toBold().withColor(Colors.orange),
+                  style: context.textTheme.caption!
+                      .toBold()
+                      .withColor(Colors.orange),
                 ),
               ),
             ],
@@ -310,7 +312,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _heading(String heading) {
     return Text(
       heading,
-      style: context.textTheme.titleLarge!.toBold().withColor(
+      style: context.textTheme.headline6!.toBold().withColor(
             primaryColor,
           ),
     );
