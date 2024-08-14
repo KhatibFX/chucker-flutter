@@ -13,7 +13,7 @@ class ChuckerChopperInterceptor extends ResponseInterceptor {
   @override
   FutureOr<Response> onResponse(Response response) async {
     final time = DateTime.now();
-    await SharedPreferencesManager().getSettings();
+    await SharedPreferencesManager.getInstance().getSettings();
 
     if (ChuckerFlutter.isDebugMode || ChuckerFlutter.showOnRelease) {
       ChuckerUiHelper.showNotification(
@@ -36,7 +36,7 @@ class ChuckerChopperInterceptor extends ResponseInterceptor {
       // ignore: empty_catches
     } catch (e) {}
 
-    await SharedPreferencesManager().addApiResponse(
+    await SharedPreferencesManager.getInstance().addApiResponse(
       ApiResponse(
         body: {'data': responseBody},
         path: response.base.request?.url.path ?? emptyString,

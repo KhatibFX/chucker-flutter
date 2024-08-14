@@ -35,15 +35,12 @@ abstract class ChopperApiService extends ChopperService {
   });
 
   static ChopperApiService create() {
-    final client = ChopperClient(
-      services: [
-        _$ChopperApiService(),
-      ],
-      interceptors: [
-        ChuckerHttpLoggingInterceptor(),
-        ChuckerChopperInterceptor(),
-      ],
-    );
+    final client = ChopperClient(services: [
+      _$ChopperApiService(),
+    ], interceptors: [
+      HttpLoggingInterceptor(),
+      ChuckerChopperInterceptor(),
+    ]);
     return _$ChopperApiService(client);
   }
 }

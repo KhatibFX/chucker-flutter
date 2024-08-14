@@ -2,7 +2,7 @@ import 'package:chucker_flutter/src/models/api_response.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  ApiResponse getMockedResponse() {
+  ApiResponse _getMockedResponse() {
     const body = {'key': 'value'};
     const baseUrl = 'https://www.syedmurtaza.site';
     const path = 'api/get';
@@ -46,7 +46,7 @@ void main() {
     );
   }
 
-  void equateApiResponses(
+  void _equateApiResponses(
     ApiResponse response,
     ApiResponse mockedResponse,
   ) {
@@ -80,7 +80,7 @@ void main() {
   });
 
   test('CopyWith should copy each attribute properly', () {
-    final mockedResponse = getMockedResponse();
+    final mockedResponse = _getMockedResponse();
     final response = ApiResponse.mock().copyWith(
       body: mockedResponse.body,
       baseUrl: mockedResponse.baseUrl,
@@ -103,11 +103,11 @@ void main() {
       clientLibrary: mockedResponse.clientLibrary,
     );
 
-    equateApiResponses(response, mockedResponse);
+    _equateApiResponses(response, mockedResponse);
   });
 
   test('toJson should convert each attribute to its respective key', () {
-    final response = getMockedResponse();
+    final response = _getMockedResponse();
 
     final json = {
       'body': response.body,
@@ -136,21 +136,21 @@ void main() {
   });
 
   test('fromJson should convert each key to its respective attribute', () {
-    final mockedResponse = getMockedResponse();
+    final mockedResponse = _getMockedResponse();
 
     final toJson = mockedResponse.toJson();
     final response = ApiResponse.fromJson(toJson);
-    equateApiResponses(response, mockedResponse);
+    _equateApiResponses(response, mockedResponse);
   });
 
   test('toString should never return empty string', () {
-    final mockedResponse = getMockedResponse();
+    final mockedResponse = _getMockedResponse();
     expect(mockedResponse.toString().isNotEmpty, true);
   });
 
   test('hashCode should return request time in milliseconds', () {
     final now = DateTime.now();
-    final mockedResponse = getMockedResponse().copyWith(requestTime: now);
+    final mockedResponse = _getMockedResponse().copyWith(requestTime: now);
     expect(mockedResponse.hashCode, now.millisecondsSinceEpoch);
   });
 }

@@ -23,7 +23,7 @@ class ChuckerDioInterceptor extends Interceptor {
     Response response,
     ResponseInterceptorHandler handler,
   ) async {
-    await SharedPreferencesManager().getSettings();
+    await SharedPreferencesManager.getInstance().getSettings();
 
     if (!ChuckerFlutter.isDebugMode && !ChuckerFlutter.showOnRelease) {
       handler.next(response);
@@ -41,7 +41,7 @@ class ChuckerDioInterceptor extends Interceptor {
 
   @override
   Future<void> onError(DioError err, ErrorInterceptorHandler handler) async {
-    await SharedPreferencesManager().getSettings();
+    await SharedPreferencesManager.getInstance().getSettings();
 
     if (!ChuckerFlutter.isDebugMode && !ChuckerFlutter.showOnRelease) {
       handler.next(err);
@@ -58,7 +58,7 @@ class ChuckerDioInterceptor extends Interceptor {
   }
 
   Future<void> _saveResponse(Response response) async {
-    await SharedPreferencesManager().addApiResponse(
+    await SharedPreferencesManager.getInstance().addApiResponse(
       ApiResponse(
         body: {'data': response.data},
         path: response.requestOptions.path,
@@ -86,7 +86,7 @@ class ChuckerDioInterceptor extends Interceptor {
   }
 
   Future<void> _saveError(DioError response) async {
-    await SharedPreferencesManager().addApiResponse(
+    await SharedPreferencesManager.getInstance().addApiResponse(
       ApiResponse(
         body: {'data': jsonDecode(response.response.toString())},
         path: response.requestOptions.path,

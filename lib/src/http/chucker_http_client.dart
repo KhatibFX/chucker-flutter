@@ -55,7 +55,7 @@ class ChuckerHttpClient extends BaseClient {
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
     _requestTime = DateTime.now();
-    await SharedPreferencesManager().getSettings();
+    await SharedPreferencesManager.getInstance().getSettings();
 
     final interceptedRequest = onRequest(request);
 
@@ -112,7 +112,7 @@ class ChuckerHttpClient extends BaseClient {
       // ignore: empty_catches
     } catch (e) {}
 
-    await SharedPreferencesManager().addApiResponse(
+    await SharedPreferencesManager.getInstance().addApiResponse(
       ApiResponse(
         body: {'data': responseBody},
         path: request.url.path,

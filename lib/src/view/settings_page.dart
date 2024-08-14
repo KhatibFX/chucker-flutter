@@ -205,7 +205,7 @@ class _SettingsPageState extends State<SettingsPage> {
       showDeleteConfirmDialog: showDeleteConfirmDialog,
       language: language,
     );
-    SharedPreferencesManager().setSettings(_settings);
+    SharedPreferencesManager.getInstance().setSettings(_settings);
     setState(() {});
   }
 

@@ -158,7 +158,7 @@ class _NotificationState extends State<Notification>
   }
 
   Future<void> _openDetails() async {
-    final api = await SharedPreferencesManager().getApiResponse(
+    final api = await SharedPreferencesManager.getInstance().getApiResponse(
       widget.requestTime,
     );
     await ChuckerFlutter.navigatorObserver.navigator?.push(

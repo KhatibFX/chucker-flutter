@@ -7,12 +7,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  late final SharedPreferencesManager sharedPreferencesManager;
+  late final SharedPreferencesManager _sharedPreferencesManager;
 
   setUpAll(() {
-    sharedPreferencesManager = SharedPreferencesManager.getInstance(
-      initData: false,
-    );
+    _sharedPreferencesManager = SharedPreferencesManager.getInstance();
   });
 
   testWidgets(
@@ -20,7 +18,7 @@ void main() {
     (WidgetTester tester) async {
       SharedPreferences.setMockInitialValues({});
 
-      final settings = await sharedPreferencesManager.getSettings();
+      final settings = await _sharedPreferencesManager.getSettings();
 
       expect(settings.showNotification, true);
 
@@ -31,7 +29,7 @@ void main() {
       await tester.tap(find.byWidget(switches.first.widget));
       await tester.pumpAndSettle();
 
-      final newSettings = await sharedPreferencesManager.getSettings();
+      final newSettings = await _sharedPreferencesManager.getSettings();
 
       expect(newSettings.showNotification, false);
     },
@@ -42,37 +40,29 @@ void main() {
     (WidgetTester tester) async {
       SharedPreferences.setMockInitialValues({});
 
-      final settings = await sharedPreferencesManager.getSettings();
+      final settings = await _sharedPreferencesManager.getSettings();
 
       expect(settings.showRequestsStats, true);
 
       await tester.pumpWidget(const MaterialApp(home: SettingsPage()));
 
       final switches = find.byType(Switch).evaluate();
-      final finderShowRequestSwitch =
-          find.byWidget(switches.elementAt(1).widget);
-
-      await tester.dragUntilVisible(
-        finderShowRequestSwitch,
-        find.byType(ListView),
-        const Offset(0, 500),
-      );
 
       await tester.tap(find.byWidget(switches.elementAt(1).widget));
       await tester.pumpAndSettle();
 
-      final newSettings = await sharedPreferencesManager.getSettings();
+      final newSettings = await _sharedPreferencesManager.getSettings();
 
       expect(newSettings.showRequestsStats, false);
     },
   );
 
   testWidgets(
-    'Delete confirmation dialog on/off settings should be saved in shared preferences',
+    'Delete confir dialog on/off settings should be saved in shared preferences',
     (WidgetTester tester) async {
       SharedPreferences.setMockInitialValues({});
 
-      final settings = await sharedPreferencesManager.getSettings();
+      final settings = await _sharedPreferencesManager.getSettings();
 
       expect(settings.showDeleteConfirmDialog, true);
 
@@ -91,7 +81,7 @@ void main() {
       await tester.tap(finderDeleteDioSwitch);
       await tester.pumpAndSettle();
 
-      final newSettings = await sharedPreferencesManager.getSettings();
+      final newSettings = await _sharedPreferencesManager.getSettings();
 
       expect(newSettings.showDeleteConfirmDialog, false);
     },
@@ -102,7 +92,7 @@ void main() {
     (WidgetTester tester) async {
       SharedPreferences.setMockInitialValues({});
 
-      final settings = await sharedPreferencesManager.getSettings();
+      final settings = await _sharedPreferencesManager.getSettings();
 
       expect(settings.duration.inSeconds, 2);
 
@@ -118,7 +108,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      final newSettings = await sharedPreferencesManager.getSettings();
+      final newSettings = await _sharedPreferencesManager.getSettings();
 
       expect(newSettings.duration.inSeconds, 6);
     },
@@ -129,7 +119,7 @@ void main() {
     (WidgetTester tester) async {
       SharedPreferences.setMockInitialValues({});
 
-      final settings = await sharedPreferencesManager.getSettings();
+      final settings = await _sharedPreferencesManager.getSettings();
 
       expect(settings.apiThresholds, 100);
 
@@ -152,7 +142,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      final newSettings = await sharedPreferencesManager.getSettings();
+      final newSettings = await _sharedPreferencesManager.getSettings();
 
       expect(newSettings.apiThresholds, 1000);
     },
@@ -163,7 +153,7 @@ void main() {
     (WidgetTester tester) async {
       SharedPreferences.setMockInitialValues({});
 
-      final settings = await sharedPreferencesManager.getSettings();
+      final settings = await _sharedPreferencesManager.getSettings();
 
       expect(settings.notificationAlignment, Alignment.bottomCenter);
 
@@ -179,7 +169,7 @@ void main() {
       await tester.tap(find.text('BottomLeft'));
       await tester.pumpAndSettle();
 
-      final newSettings = await sharedPreferencesManager.getSettings();
+      final newSettings = await _sharedPreferencesManager.getSettings();
 
       expect(newSettings.notificationAlignment, Alignment.bottomLeft);
     },
@@ -190,7 +180,7 @@ void main() {
     (WidgetTester tester) async {
       SharedPreferences.setMockInitialValues({});
 
-      final settings = await sharedPreferencesManager.getSettings();
+      final settings = await _sharedPreferencesManager.getSettings();
 
       expect(settings.httpMethod, HttpMethod.none);
 
@@ -206,7 +196,7 @@ void main() {
       await tester.tap(find.text('DELETE'));
       await tester.pumpAndSettle();
 
-      final newSettings = await sharedPreferencesManager.getSettings();
+      final newSettings = await _sharedPreferencesManager.getSettings();
 
       expect(newSettings.httpMethod, HttpMethod.delete);
     },
@@ -217,7 +207,7 @@ void main() {
     (WidgetTester tester) async {
       SharedPreferences.setMockInitialValues({});
 
-      final settings = await sharedPreferencesManager.getSettings();
+      final settings = await _sharedPreferencesManager.getSettings();
 
       expect(settings.language, Language.english);
 
@@ -239,7 +229,7 @@ void main() {
       await tester.tap(find.text('urdu'));
       await tester.pumpAndSettle();
 
-      final newSettings = await sharedPreferencesManager.getSettings();
+      final newSettings = await _sharedPreferencesManager.getSettings();
 
       expect(newSettings.language, Language.urdu);
     },

@@ -80,7 +80,7 @@ class ChuckerUiHelper {
   ///[showChuckerScreen] shows the screen containing the list of recored
   ///api requests
   static void showChuckerScreen() {
-    SharedPreferencesManager().getSettings();
+    SharedPreferencesManager.getInstance().getSettings();
     ChuckerFlutter.navigatorObserver.navigator!.push(
       MaterialPageRoute(
         builder: (context) => MaterialApp(

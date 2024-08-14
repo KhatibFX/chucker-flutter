@@ -16,7 +16,7 @@ class SharedPreferencesManager {
 
   ///[getInstance] returns the singleton object of [SharedPreferencesManager]
   // ignore: prefer_constructors_over_static_methods
-  factory SharedPreferencesManager() {
+  static SharedPreferencesManager getInstance() {
     return _sharedPreferencesManager ??= SharedPreferencesManager._();
   }
 

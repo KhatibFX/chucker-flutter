@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  Settings getMockedSettings() {
+  Settings _getMockedSettings() {
     const duration = Duration(seconds: 100);
     const alignment = Alignment.center;
     const threshold = 400;
@@ -43,7 +43,7 @@ void main() {
   });
 
   test('CopyWith should copy each attribute properly', () {
-    final settings = getMockedSettings();
+    final settings = _getMockedSettings();
     final newSettings = Settings.defaultObject().copyWith(
       duration: settings.duration,
       notificationAlignment: settings.notificationAlignment,
@@ -63,12 +63,12 @@ void main() {
   });
 
   test('toJson should convert each attribute to its respective key', () {
-    final settings = getMockedSettings();
+    final settings = _getMockedSettings();
     final json = {
       'duration': settings.duration.inSeconds,
       'notificationAlignment': [
         settings.notificationAlignment.x,
-        settings.notificationAlignment.y,
+        settings.notificationAlignment.y
       ],
       'apiThresholds': settings.apiThresholds,
       'httpMethod': settings.httpMethod.index,
@@ -85,7 +85,7 @@ void main() {
   });
 
   test('fromJson should convert each key to its respective attribute', () {
-    final settings = getMockedSettings();
+    final settings = _getMockedSettings();
 
     final toJson = settings.toJson();
     final fromSettings = Settings.fromJson(toJson);
@@ -94,7 +94,7 @@ void main() {
   });
 
   test('hashCode should return request time in milliseconds', () {
-    final settings = getMockedSettings();
+    final settings = _getMockedSettings();
 
     final hash = Object.hash(
       settings.apiThresholds,

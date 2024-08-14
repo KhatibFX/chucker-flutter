@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 
 void main() {
   ChuckerFlutter.showOnRelease = true;
-  ChuckerFlutter.showNotification = false;
   runApp(const App());
 }
 
@@ -44,9 +43,9 @@ class _TodoPageState extends State<TodoPage> {
 
   late final _dio = Dio(
     BaseOptions(
-      sendTimeout: const Duration(seconds: 30),
-      connectTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 30),
+      sendTimeout: const Duration(seconds: 30).inMilliseconds,
+      connectTimeout: const Duration(seconds: 30).inMilliseconds,
+      receiveTimeout: const Duration(seconds: 30).inMilliseconds,
     ),
   );
 
