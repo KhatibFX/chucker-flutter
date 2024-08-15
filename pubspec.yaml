@@ -5,7 +5,7 @@ repository: https://github.com/syedmurtaza108/chucker-flutter
 issue_tracker: https://github.com/syedmurtaza108/chucker-flutter/issues
 funding:
   - https://www.patreon.com/syedmurtaza
-isar_version: &isar_version 3.1.0
+isar_version: &isar_version 3.1.0+1
 
 environment:
   sdk: ">=2.16.0 <3.0.0"
