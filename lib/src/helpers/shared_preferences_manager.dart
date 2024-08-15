@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
 import 'package:chucker_flutter/src/localization/localization.dart';
 import 'package:chucker_flutter/src/models/api_response.dart';
-import 'package:chucker_flutter/src/models/settings.dart';
 import 'package:chucker_flutter/src/models/settings_db.dart';
 import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
