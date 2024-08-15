@@ -4,6 +4,7 @@ import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
 import 'package:chucker_flutter/src/localization/localization.dart';
 import 'package:chucker_flutter/src/models/api_response.dart';
 import 'package:chucker_flutter/src/models/settings.dart';
+import 'package:chucker_flutter/src/models/settings_db.dart';
 import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -93,7 +94,7 @@ class SharedPreferencesManager implements IStorageManager {
 
   ///[setSettings] saves the chucker settings in user's disk
   @override
-  Future<void> setSettings(Settings settings) async {
+  Future<void> setSettings(SettingsDb settings) async {
     final preferences = await SharedPreferences.getInstance();
 
     await preferences.setString(
@@ -106,10 +107,10 @@ class SharedPreferencesManager implements IStorageManager {
 
   ///[getSettings] gets the chucker settings from user's disk
   @override
-  Future<Settings> getSettings() async {
+  Future<SettingsDb> getSettings() async {
     final preferences = await SharedPreferences.getInstance();
 
-    var settings = Settings.defaultObject();
+    var settings = SettingsDb.defaultObject();
 
     final jsonString = preferences.getString(_kSettings);
 
@@ -119,10 +120,10 @@ class SharedPreferencesManager implements IStorageManager {
 
     final json = jsonDecode(jsonString);
 
-    settings = Settings.fromJson(json as Map<String, dynamic>);
+    settings = SettingsDb.fromJson(json as Map<String, dynamic>);
 
     ChuckerUiHelper.settings = settings;
-    Localization.updateLocalization(ChuckerUiHelper.settings.language);
+    Localization.updateLocalization(ChuckerUiHelper.settings.language!);
     return settings;
   }
 

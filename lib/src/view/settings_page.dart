@@ -46,7 +46,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 description: Localization.strings['notificationSettingDesc']!,
                 child: Switch.adaptive(
                   activeColor: primaryColor,
-                  value: _settings.showNotification,
+                  value: _settings.showNotification!,
                   onChanged: (value) {
                     _saveSettings(showNotification: value, storageManager: widget.storageManager);
                   },
@@ -57,14 +57,14 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: Localization.strings['duration']!,
                 description: Localization.strings['durationSettingDesc']!,
                 helperText:
-                    '''${_settings.duration.inSeconds} ${Localization.strings['seconds']}''',
+                    '''${_settings.durationMilliseconds} ${Localization.strings['milliseconds']}''',
                 child: Slider.adaptive(
                   min: 2,
                   max: 10,
                   divisions: 9,
                   activeColor: primaryColor,
-                  label: _settings.duration.inSeconds.toString(),
-                  value: _settings.duration.inSeconds.toDouble(),
+                  label: _settings.durationMilliseconds.toString(),
+                  value: _settings.durationMilliseconds!.toDouble(),
                   onChanged: (value) {
                     _saveSettings(duration: Duration(seconds: value.toInt()), storageManager: widget.storageManager);
                   },
@@ -75,8 +75,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: Localization.strings['alignment']!,
                 description: Localization.strings['alignmentSettingDesc']!,
                 child: AlignmentMenu(
-                  notificationAlignment: _settings.notificationAlignment,
-                  title: _getAlignmentMenuTitle(),
+                  notificationAlignment: Alignment.bottomCenter,
+                  title: 'BottomCenter',//_getAlignmentMenuTitle(),
                   onSelect: (alignment) {
                     _saveSettings(notificationAlignment: alignment, storageManager: widget.storageManager);
                   },
@@ -94,7 +94,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: Localization.strings['selectedMethod']!,
                 description: Localization.strings['selectedMethodDesc']!,
                 child: HttpMethodsMenu(
-                  httpMethod: _settings.httpMethod,
+                  httpMethod: _settings.httpMethod!,
                   onFilter: (method) {
                     _saveSettings(httpMethod: method, storageManager: widget.storageManager);
                   },
@@ -107,7 +107,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 description: Localization.strings['showRequestStatsDesc']!,
                 child: Switch.adaptive(
                   activeColor: primaryColor,
-                  value: _settings.showRequestsStats,
+                  value: _settings.showRequestsStats!,
                   onChanged: (value) {
                     _saveSettings(showRequestsStats: value, storageManager: widget.storageManager);
                   },
@@ -131,7 +131,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   divisions: 90,
                   activeColor: primaryColor,
                   label: _settings.apiThresholds.toString(),
-                  value: _settings.apiThresholds.toDouble(),
+                  value: _settings.apiThresholds!.toDouble(),
                   onChanged: (value) {
                     _saveSettings(apiThresholds: value.toInt(), storageManager: widget.storageManager);
                   },
@@ -148,7 +148,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 description: Localization.strings['showDialogDesc']!,
                 child: Switch.adaptive(
                   activeColor: primaryColor,
-                  value: _settings.showDeleteConfirmDialog,
+                  value: _settings.showDeleteConfirmDialog!,
                   onChanged: (value) {
                     _saveSettings(showDeleteConfirmDialog: value, storageManager: widget.storageManager);
                   },
@@ -164,7 +164,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: Localization.strings['chuckerLanguage']!,
                 description: Localization.strings['chuckerLanguageDesc']!,
                 child: LanguagesMenu(
-                  language: _settings.language,
+                  language: _settings.language!,
                   onSelect: (language) {
                     _saveSettings(language: language, storageManager: widget.storageManager);
                   },
@@ -194,13 +194,12 @@ class _SettingsPageState extends State<SettingsPage> {
       Language? language,
       required IStorageManager storageManager}) {
     _settings = _settings.copyWith(
-      duration: duration,
+      durationMilliseconds: duration?.inMilliseconds,
       positionBottom: positionBottom,
       positionLeft: positionLeft,
       positionRight: positionRight,
       positionTop: positionTop,
       httpMethod: httpMethod,
-      notificationAlignment: notificationAlignment,
       apiThresholds: apiThresholds,
       showRequestsStats: showRequestsStats,
       showNotification: showNotification,
@@ -211,28 +210,28 @@ class _SettingsPageState extends State<SettingsPage> {
     setState(() {});
   }
 
-  String _getAlignmentMenuTitle() {
-    if (_settings.notificationAlignment == Alignment.bottomCenter) {
-      return 'BottomCenter';
-    } else if (_settings.notificationAlignment == Alignment.bottomLeft) {
-      return 'BottomLeft';
-    } else if (_settings.notificationAlignment == Alignment.bottomRight) {
-      return 'BottomRight';
-    } else if (_settings.notificationAlignment == Alignment.center) {
-      return 'Center';
-    } else if (_settings.notificationAlignment == Alignment.centerLeft) {
-      return 'CenterLeft';
-    } else if (_settings.notificationAlignment == Alignment.centerRight) {
-      return 'CenterRight';
-    } else if (_settings.notificationAlignment == Alignment.topCenter) {
-      return 'TopCenter';
-    } else if (_settings.notificationAlignment == Alignment.topLeft) {
-      return 'TopLeft';
-    } else if (_settings.notificationAlignment == Alignment.topRight) {
-      return 'TopRight';
-    }
-    return '';
-  }
+  // String _getAlignmentMenuTitle() {
+  //   if (_settings.notificationAlignment == Alignment.bottomCenter) {
+  //     return 'BottomCenter';
+  //   } else if (_settings.notificationAlignment == Alignment.bottomLeft) {
+  //     return 'BottomLeft';
+  //   } else if (_settings.notificationAlignment == Alignment.bottomRight) {
+  //     return 'BottomRight';
+  //   } else if (_settings.notificationAlignment == Alignment.center) {
+  //     return 'Center';
+  //   } else if (_settings.notificationAlignment == Alignment.centerLeft) {
+  //     return 'CenterLeft';
+  //   } else if (_settings.notificationAlignment == Alignment.centerRight) {
+  //     return 'CenterRight';
+  //   } else if (_settings.notificationAlignment == Alignment.topCenter) {
+  //     return 'TopCenter';
+  //   } else if (_settings.notificationAlignment == Alignment.topLeft) {
+  //     return 'TopLeft';
+  //   } else if (_settings.notificationAlignment == Alignment.topRight) {
+  //     return 'TopRight';
+  //   }
+  //   return '';
+  // }
 
   Column _settingRow({
     required String title,

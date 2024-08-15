@@ -1,6 +1,6 @@
 import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
 import 'package:chucker_flutter/src/models/api_response.dart';
-import 'package:chucker_flutter/src/models/settings.dart';
+import 'package:chucker_flutter/src/models/settings_db.dart';
 
 class IsarManager implements IStorageManager {
 
@@ -35,13 +35,13 @@ class IsarManager implements IStorageManager {
   }
 
   @override
-  Future<Settings> getSettings() {
+  Future<SettingsDb> getSettings() {
     // TODO: implement getSettings
     throw UnimplementedError();
   }
 
   @override
-  Future<void> setSettings(Settings settings) {
+  Future<void> setSettings(SettingsDb settings) {
     // TODO: implement setSettings
     throw UnimplementedError();
   }

@@ -88,11 +88,11 @@ class _ChuckerPageState extends State<ChuckerPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Visibility(
-              visible: ChuckerUiHelper.settings.showRequestsStats,
+              visible: ChuckerUiHelper.settings.showRequestsStats!,
               child: const SizedBox(height: 16),
             ),
             Visibility(
-              visible: ChuckerUiHelper.settings.showRequestsStats,
+              visible: ChuckerUiHelper.settings.showRequestsStats!,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
@@ -124,7 +124,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
               onSearch: (query) {
                 setState(() => _query = query);
               },
-              httpMethod: _httpMethod,
+              httpMethod: _httpMethod!,
               query: _query,
             ),
             const SizedBox(height: 16),
@@ -166,13 +166,13 @@ class _ChuckerPageState extends State<ChuckerPage> {
     );
   }
 
-  int get _remaingRequests => ChuckerUiHelper.settings.apiThresholds - _apis.length;
+  int get _remaingRequests => ChuckerUiHelper.settings.apiThresholds! - _apis.length;
 
   List<ApiResponse> _successApis({bool filterApply = true}) {
     final query = _query.toLowerCase();
     return _apis.where((element) {
       var success = element.statusCode > 199 && element.statusCode < 300;
-      final methodFilter = element.method.toLowerCase() == _httpMethod.name;
+      final methodFilter = element.method.toLowerCase() == _httpMethod!.name;
       if (filterApply) {
         success = success && (_httpMethod == HttpMethod.none || methodFilter);
         if (query.isEmpty) {
@@ -192,7 +192,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
     final query = _query.toLowerCase();
     return _apis.where((element) {
       var failed = element.statusCode < 200 || element.statusCode > 299;
-      final methodFilter = element.method.toLowerCase() == _httpMethod.name;
+      final methodFilter = element.method.toLowerCase() == _httpMethod!.name;
       if (filterApply) {
         failed = failed && (_httpMethod == HttpMethod.none || methodFilter);
         if (query.isEmpty) {
@@ -212,7 +212,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
 
   Future<void> _deleteAnApi(String dateTime) async {
     var deleteConfirm = true;
-    if (ChuckerUiHelper.settings.showDeleteConfirmDialog) {
+    if (ChuckerUiHelper.settings.showDeleteConfirmDialog!) {
       deleteConfirm = await showConfirmationDialog(
             context,
             title: Localization.strings['singleDeletionTitle']!,
@@ -233,7 +233,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
 
   Future<void> _deleteAllSelected() async {
     var deleteConfirm = true;
-    if (ChuckerUiHelper.settings.showDeleteConfirmDialog) {
+    if (ChuckerUiHelper.settings.showDeleteConfirmDialog!) {
       deleteConfirm = await showConfirmationDialog(
             context,
             title: Localization.strings['multipleDeletionTitle']!,

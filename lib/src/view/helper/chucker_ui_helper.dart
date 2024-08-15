@@ -1,7 +1,7 @@
 import 'package:chucker_flutter/src/helpers/extensions.dart';
 import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
 import 'package:chucker_flutter/src/localization/localization.dart';
-import 'package:chucker_flutter/src/models/settings.dart';
+import 'package:chucker_flutter/src/models/settings_db.dart';
 import 'package:chucker_flutter/src/view/chucker_page.dart';
 import 'package:chucker_flutter/src/view/helper/chucker_button.dart';
 import 'package:chucker_flutter/src/view/helper/colors.dart';
@@ -21,7 +21,7 @@ class ChuckerUiHelper {
   static bool notificationShown = false;
 
   ///[settings] to modify ui behaviour of chucker screens and notification
-  static Settings settings = Settings.defaultObject();
+  static SettingsDb settings = SettingsDb.defaultObject();
 
   ///[showNotification] shows the rest api [method] (GET, POST, PUT, etc),
   ///[statusCode] (200, 400, etc) response status and [path]
@@ -32,7 +32,7 @@ class ChuckerUiHelper {
     required DateTime requestTime,
     required IStorageManager storageManager,
   }) {
-    if (ChuckerUiHelper.settings.showNotification &&
+    if (ChuckerUiHelper.settings.showNotification! &&
         ChuckerFlutter.navigatorObserver.navigator != null) {
       final overlay = ChuckerFlutter.navigatorObserver.navigator!.overlay;
       final _entry = _createOverlayEntry(method, statusCode, path, requestTime, storageManager);
@@ -55,7 +55,7 @@ class ChuckerUiHelper {
     return OverlayEntry(
       builder: (context) {
         return Align(
-          alignment: settings.notificationAlignment,
+          alignment: Alignment.bottomCenter,
           child: notification.Notification(
             statusCode: statusCode,
             method: method,
