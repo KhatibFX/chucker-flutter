@@ -117,7 +117,7 @@ class _NotificationState extends State<Notification> with SingleTickerProviderSt
                   Text(
                     widget.statusCode.toString(),
                     textAlign: TextAlign.center,
-                    style: context.textTheme.bodyLarge!.toBold(),
+                    style: context.textTheme.bodyText1!.toBold(),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -127,12 +127,14 @@ class _NotificationState extends State<Notification> with SingleTickerProviderSt
                       children: [
                         Text(
                           widget.method.toUpperCase(),
-                          style: context.textTheme.bodyMedium!.toBold().withColor(methodColor(widget.method)),
+                          style: context.textTheme.bodyText2!
+                              .toBold()
+                              .withColor(methodColor(widget.method)),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           widget.path,
-                          style: context.textTheme.bodySmall,
+                          style: context.textTheme.caption,
                         ),
                       ],
                     ),
@@ -146,7 +148,7 @@ class _NotificationState extends State<Notification> with SingleTickerProviderSt
                     },
                     text: Localization.strings['details']!,
                     foreColor: Colors.white,
-                  ),
+                  )
                 ],
               ),
             ),
@@ -161,12 +163,7 @@ class _NotificationState extends State<Notification> with SingleTickerProviderSt
           widget.requestTime,
         );
     await ChuckerFlutter.navigatorObserver.navigator?.push(
-      MaterialPageRoute<dynamic>(
-        builder: (_) => Theme(
-          data: ThemeData.light(useMaterial3: false),
-          child: ApiDetailsPage(api: api),
-        ),
-      ),
+      MaterialPageRoute(builder: (_) => ApiDetailsPage(api: api)),
     );
   }
 

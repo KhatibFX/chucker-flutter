@@ -50,7 +50,7 @@ class _AlignmentMenuState extends State<AlignmentMenu> {
     );
   }
 
-  PopupMenuEntry<dynamic> _radioButton(
+  PopupMenuEntry _radioButton(
     String text,
     Alignment notificationAlignment,
   ) {

@@ -32,39 +32,17 @@ class ChuckerUiHelper {
     required DateTime requestTime,
     required IStorageManager storageManager,
   }) {
+    if (ChuckerUiHelper.settings.showNotification &&
+        ChuckerFlutter.navigatorObserver.navigator != null) {
+      final overlay = ChuckerFlutter.navigatorObserver.navigator!.overlay;
+      final _entry = _createOverlayEntry(method, statusCode, path, requestTime, storageManager);
+      _overlayEntries.add(_entry);
+      overlay?.insert(_entry);
+      notificationShown = true;
+      return true;
+    }
     notificationShown = false;
-
-    if (!ChuckerUiHelper.settings.showNotification) {
-      debugPrint(
-        '''
-ChuckerFlutter: Your notification setting is off. You can turn it on by visiting the settings page from Chucker Flutter screen.
-        ''',
-      );
-      return false;
-    }
-    if (ChuckerFlutter.navigatorObserver.navigator == null) {
-      debugPrint(
-        '''
-ChuckerFlutter: You didn't add ChuckerFlutter.navigatorObserver in your material app. Visit https://github.com/syedmurtaza108/chucker-flutter#getting-started for Chucker Integration details.
-        ''',
-      );
-      return false;
-    }
-    if (!ChuckerFlutter.showNotification) {
-      debugPrint(
-        '''
-ChuckerFlutter: You programmatically vetoed notification behavior. Make sure to remove `ChuckerFlutter.showNotification = true` to continue receiving notifications.
-        ''',
-      );
-      return false;
-    }
-
-    final overlay = ChuckerFlutter.navigatorObserver.navigator!.overlay;
-    final entry = _createOverlayEntry(method, statusCode, path, requestTime, storageManager);
-    _overlayEntries.add(entry);
-    overlay?.insert(entry);
-    notificationShown = true;
-    return true;
+    return false;
   }
 
   static OverlayEntry _createOverlayEntry(
@@ -103,8 +81,9 @@ ChuckerFlutter: You programmatically vetoed notification behavior. Make sure to 
   ///[showChuckerScreen] shows the screen containing the list of recored
   ///api requests
   static void showChuckerScreen(IStorageManager storageManager) {
+    storageManager.getSettings();
     ChuckerFlutter.navigatorObserver.navigator!.push(
-      MaterialPageRoute<void>(
+      MaterialPageRoute(
         builder: (context) => MaterialApp(
           key: const Key('chucker_material_app'),
           debugShowCheckedModeBanner: false,
@@ -112,14 +91,11 @@ ChuckerFlutter: You programmatically vetoed notification behavior. Make sure to 
           supportedLocales: Localization.supportedLocales,
           locale: Localization.currentLocale,
           theme: ThemeData(
-            useMaterial3: false,
             tabBarTheme: TabBarTheme(
               labelColor: Colors.white,
-              labelStyle: context.textTheme.bodyLarge,
+              labelStyle: context.textTheme.bodyText1,
             ),
-            colorScheme: Theme.of(context).colorScheme.copyWith(
-                  surface: primaryColor,
-                ),
+            backgroundColor: primaryColor,
           ),
           home: ChuckerPage(storageManager: storageManager),
         ),
@@ -132,8 +108,6 @@ ChuckerFlutter: You programmatically vetoed notification behavior. Make sure to 
 ///
 ///[chuckerButton] and notifications only be visible in debug mode
 class ChuckerFlutter {
-  ChuckerFlutter();
-
   ///[navigatorObserver] observes the navigation of your app. It must be
   ///referenced in your MaterialApp widget
   static final navigatorObserver = NavigatorObserver();
@@ -145,10 +119,6 @@ class ChuckerFlutter {
 
   ///[isDebugMode] A wrapper of Flutter's `kDebugMode` constant
   static bool isDebugMode = kDebugMode;
-
-  ///[showNotification] decides whether to show in app notification or not
-  ///By default its value is `true`
-  static bool showNotification = true;
 
   ///[ChuckerButton] can be placed anywhere in the UI to open Chucker Screen
   static Widget getChuckerButton(IStorageManager storageManager) =>

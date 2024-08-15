@@ -5,12 +5,6 @@ import 'package:chucker_flutter/src/models/settings.dart';
 class IsarManager implements IStorageManager {
 
   @override
-  Future<void> init() {
-    // TODO: implement init
-    throw UnimplementedError();
-  }
-
-  @override
   Future<void> addApiResponse(ApiResponse apiResponse) {
     // TODO: implement addApiResponse
     throw UnimplementedError();
