@@ -10,12 +10,7 @@ class SharedPreferencesManager implements IStorageManager {
     }
   }
 
-  static final SharedPreferencesManager _sharedPreferencesManager = SharedPreferencesManager._(true);
-
-  factory SharedPreferencesManager() {
-    return _sharedPreferencesManager;
-  }
-
+  static final SharedPreferencesManager instance = SharedPreferencesManager._(true);
 
   @override
   Future<void> init() async {

@@ -44,13 +44,13 @@ class _TodoPageState extends State<TodoPage> {
 
   late final _dio = Dio(
     BaseOptions(
-      sendTimeout: const Duration(seconds: 30),
-      connectTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 30),
+      sendTimeout: 30,
+      connectTimeout: 30,
+      receiveTimeout: 30,
     ),
   );
 
-  final _chuckerHttpClient = ChuckerHttpClient(http.Client());
+  final _chuckerHttpClient = ChuckerHttpClient(http.Client(), SharedPreferencesManager.instance);
 
   final _chopperApiService = ChopperApiService.create();
 
@@ -238,7 +238,7 @@ class _TodoPageState extends State<TodoPage> {
   @override
   void initState() {
     super.initState();
-    _dio.interceptors.add(ChuckerDioInterceptor());
+    _dio.interceptors.add(ChuckerDioInterceptor(SharedPreferencesManager.instance));
   }
 
   @override
@@ -279,7 +279,7 @@ class _TodoPageState extends State<TodoPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: 16),
-            ChuckerFlutter.chuckerButton,
+            ChuckerFlutter.getChuckerButton(SharedPreferencesManager.instance),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: get,

@@ -41,7 +41,7 @@ abstract class ChopperApiService extends ChopperService {
       ],
       interceptors: [
         ChuckerHttpLoggingInterceptor(),
-        ChuckerChopperInterceptor(),
+        ChuckerChopperInterceptor(SharedPreferencesManager.instance),
       ],
     );
     return _$ChopperApiService(client);
