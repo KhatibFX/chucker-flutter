@@ -1,5 +1,6 @@
 import 'package:chucker_flutter/src/view/helper/http_methods.dart';
 import 'package:chucker_flutter/src/view/helper/languages.dart';
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:isar/isar.dart';
 
@@ -45,6 +46,9 @@ class SettingsDb with _$SettingsDb {
       );
 
   Id? get id => dbId;
+  Alignment get notificationAlignment => Alignment.bottomCenter;
+  Duration get duration => Duration(milliseconds: durationMilliseconds!);
+
 
   factory SettingsDb.fromJson(Map<String, dynamic> json) => _$SettingsDbFromJson(json);
 }

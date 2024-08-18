@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
 import 'package:chucker_flutter/src/localization/localization.dart';
-import 'package:chucker_flutter/src/models/api_response.dart';
+import 'package:chucker_flutter/src/models/api_response_db.dart';
 import 'package:chucker_flutter/src/models/settings_db.dart';
 import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,8 +20,8 @@ class SharedPreferencesManager implements IStorageManager {
 
   ///[addApiResponse] sets an API response to local disk
   @override
-  Future<void> addApiResponse(ApiResponse apiResponse) async {
-    final newResponses = List<ApiResponse>.empty(growable: true);
+  Future<void> addApiResponse(ApiResponseDb apiResponse) async {
+    final newResponses = List<ApiResponseDb>.empty(growable: true);
 
     final previousResponses = await getAllApiResponses();
 
@@ -42,8 +42,8 @@ class SharedPreferencesManager implements IStorageManager {
 
   ///[getAllApiResponses] returns all api responses saved in local disk
   @override
-  Future<List<ApiResponse>> getAllApiResponses() async {
-    final apiResponses = List<ApiResponse>.empty(growable: true);
+  Future<List<ApiResponseDb>> getAllApiResponses() async {
+    final apiResponses = List<ApiResponseDb>.empty(growable: true);
 
     final preferences = await SharedPreferences.getInstance();
 
@@ -56,10 +56,10 @@ class SharedPreferencesManager implements IStorageManager {
     final list = jsonDecode(json);
 
     for (final item in list) {
-      apiResponses.add(ApiResponse.fromJson(item as Map<String, dynamic>));
+      apiResponses.add(ApiResponseDb.fromJson(item as Map<String, dynamic>));
     }
 
-    apiResponses.sort((a, b) => b.requestTime.compareTo(a.requestTime));
+    apiResponses.sort((a, b) => b.requestTime!.compareTo(a.requestTime!));
     return apiResponses;
   }
 
@@ -128,25 +128,25 @@ class SharedPreferencesManager implements IStorageManager {
 
   ///[getAllApiResponses] returns single api response at given time
   @override
-  Future<ApiResponse> getApiResponse(DateTime time) async {
-    final apiResponses = List<ApiResponse>.empty(growable: true);
+  Future<ApiResponseDb> getApiResponse(DateTime time) async {
+    final apiResponses = List<ApiResponseDb>.empty(growable: true);
 
     final preferences = await SharedPreferences.getInstance();
 
     final json = preferences.getString(_kApiResponses);
 
     if (json == null) {
-      return ApiResponse.mock();
+      return ApiResponseDb.mock();
     }
 
     final list = jsonDecode(json);
 
     for (final item in list) {
-      apiResponses.add(ApiResponse.fromJson(item as Map<String, dynamic>));
+      apiResponses.add(ApiResponseDb.fromJson(item as Map<String, dynamic>));
     }
 
     return apiResponses.firstWhere(
-      (api) => api.requestTime.compareTo(time) == 0,
+      (api) => api.requestTime?.compareTo(time) == 0,
       orElse: () => apiResponses.first,
     );
   }

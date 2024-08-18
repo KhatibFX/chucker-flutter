@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:chucker_flutter/src/helpers/constants.dart';
 import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
-import 'package:chucker_flutter/src/models/api_response.dart';
+import 'package:chucker_flutter/src/models/api_response_db.dart';
 import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
 import 'package:dio/dio.dart';
 
@@ -66,8 +66,8 @@ class ChuckerDioInterceptor extends Interceptor {
 
   Future<void> _saveResponse(Response response) async {
     await _storageManager.addApiResponse(
-      ApiResponse(
-        body: {'data': response.data},
+      ApiResponseDb(
+        bodyMap: json.encode({'data': response.data}),
         path: response.requestOptions.path,
         baseUrl: response.requestOptions.baseUrl,
         method: response.requestOptions.method,
@@ -77,9 +77,9 @@ class ChuckerDioInterceptor extends Interceptor {
         headers: response.requestOptions.headers.toString(),
         queryParameters: response.requestOptions.queryParameters.toString(),
         receiveTimeout: response.requestOptions.receiveTimeout,
-        request: {
+        requestMap: json.encode({
           'request': _separateFileObjects(response.requestOptions).data
-        },
+        }),
         requestSize: 2,
         requestTime: _requestTime,
         responseSize: 2,
@@ -94,8 +94,8 @@ class ChuckerDioInterceptor extends Interceptor {
 
   Future<void> _saveError(DioError response) async {
     await _storageManager.addApiResponse(
-      ApiResponse(
-        body: {'data': jsonDecode(response.response.toString())},
+      ApiResponseDb(
+        bodyMap: json.encode({'data': jsonDecode(response.response.toString())}),
         path: response.requestOptions.path,
         baseUrl: response.requestOptions.baseUrl,
         method: response.requestOptions.method,
@@ -105,9 +105,9 @@ class ChuckerDioInterceptor extends Interceptor {
         headers: response.requestOptions.headers.toString(),
         queryParameters: response.requestOptions.queryParameters.toString(),
         receiveTimeout: response.requestOptions.receiveTimeout,
-        request: {
+        requestMap: json.encode({
           'request': _separateFileObjects(response.requestOptions).data
-        },
+        }),
         requestSize: 2,
         requestTime: _requestTime,
         responseSize: 2,

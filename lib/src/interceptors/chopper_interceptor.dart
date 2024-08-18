@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:chopper/chopper.dart';
 import 'package:chucker_flutter/src/helpers/constants.dart';
 import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
-import 'package:chucker_flutter/src/models/api_response.dart';
+import 'package:chucker_flutter/src/models/api_response_db.dart';
 import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
 import 'package:http/http.dart' as http;
 
@@ -40,8 +40,8 @@ class ChuckerChopperInterceptor extends ResponseInterceptor {
     } catch (e) {}
 
     await _storageManager.addApiResponse(
-      ApiResponse(
-        body: {'data': responseBody},
+      ApiResponseDb(
+        bodyMap: json.encode({'data': responseBody}),
         path: response.base.request?.url.path ?? emptyString,
         baseUrl: response.base.request?.url.origin ?? emptyString,
         method: response.base.request?.method ?? emptyString,
@@ -53,7 +53,7 @@ class ChuckerChopperInterceptor extends ResponseInterceptor {
             response.base.request?.url.queryParameters.toString() ??
                 emptyString,
         receiveTimeout: 0,
-        request: {'request': _requestBody(response)},
+        requestMap: json.encode({'request': _requestBody(response)}),
         requestSize: 2,
         requestTime: time,
         responseSize: 2,

@@ -55,7 +55,7 @@ class ChuckerUiHelper {
     return OverlayEntry(
       builder: (context) {
         return Align(
-          alignment: Alignment.bottomCenter,
+          alignment: settings.notificationAlignment,
           child: notification.Notification(
             statusCode: statusCode,
             method: method,

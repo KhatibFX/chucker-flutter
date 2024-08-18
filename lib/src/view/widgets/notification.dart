@@ -45,7 +45,7 @@ class Notification extends StatefulWidget {
 
 class _NotificationState extends State<Notification> with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
-    duration: Duration(milliseconds: ChuckerUiHelper.settings.durationMilliseconds!),
+    duration: ChuckerUiHelper.settings.duration,
     vsync: this,
   )..forward();
 
@@ -60,7 +60,7 @@ class _NotificationState extends State<Notification> with SingleTickerProviderSt
   void initState() {
     super.initState();
     Future.delayed(
-      Duration(seconds: ChuckerUiHelper.settings.durationMilliseconds! - 1000),
+      Duration(seconds: ChuckerUiHelper.settings.duration.inSeconds - 1),
       () {
         if (mounted) _controller.reverse();
       },

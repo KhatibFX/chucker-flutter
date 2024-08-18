@@ -2,7 +2,7 @@ import 'package:chucker_flutter/src/helpers/extensions.dart';
 
 import 'package:chucker_flutter/src/helpers/status_code_map.dart';
 import 'package:chucker_flutter/src/localization/localization.dart';
-import 'package:chucker_flutter/src/models/api_response.dart';
+import 'package:chucker_flutter/src/models/api_response_db.dart';
 import 'package:chucker_flutter/src/view/helper/colors.dart';
 import 'package:chucker_flutter/src/view/widgets/sizeable_text_button.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class OverviewTabView extends StatelessWidget {
   }) : super(key: key);
 
   ///The item of which summary is to be shown
-  final ApiResponse api;
+  final ApiResponseDb api;
 
   @override
   Widget build(BuildContext context) {
@@ -48,19 +48,19 @@ class OverviewTabView extends StatelessWidget {
               ),
             ],
           ),
-          _dataRow(context, attribute: 'Base URL', value: api.baseUrl),
-          _dataRow(context, attribute: 'Path', value: api.path),
+          _dataRow(context, attribute: 'Base URL', value: api.baseUrl!),
+          _dataRow(context, attribute: 'Path', value: api.path!),
           _dataRow(
             context,
             attribute: 'Method',
-            value: api.method,
-            valueColor: methodColor(api.method),
+            value: api.method!,
+            valueColor: methodColor(api.method!),
           ),
           _dataRow(
             context,
             attribute: 'Status Code',
             value: '${api.statusCode} (${statusCodes[api.statusCode]})',
-            valueColor: statusColor(api.statusCode),
+            valueColor: statusColor(api.statusCode!),
           ),
           _dataRow(
             context,
@@ -72,11 +72,11 @@ class OverviewTabView extends StatelessWidget {
             attribute: 'Response Time',
             value: api.responseTime.toString(),
           ),
-          _dataRow(context, attribute: 'Headers', value: api.headers),
+          _dataRow(context, attribute: 'Headers', value: api.headers!),
           _dataRow(
             context,
             attribute: 'Query Parameters',
-            value: api.queryParameters,
+            value: api.queryParameters!,
           ),
           _dataRow(
             context,
@@ -86,31 +86,31 @@ class OverviewTabView extends StatelessWidget {
           _dataRow(
             context,
             attribute: 'Response Type',
-            value: api.responseType,
+            value: api.responseType!,
           ),
           _dataRow(
             context,
             attribute: 'Client Library',
-            value: api.clientLibrary,
+            value: api.clientLibrary!,
           ),
           _dataRow(
             context,
             attribute: 'Connection Timeout',
-            value: api.connectionTimeout.isNotZero
+            value: api.connectionTimeout!.isNotZero
                 ? '${api.connectionTimeout} ms'
                 : 'N/A',
           ),
           _dataRow(
             context,
             attribute: 'Receive Timeout',
-            value: api.receiveTimeout.isNotZero
+            value: api.receiveTimeout!.isNotZero
                 ? '${api.receiveTimeout} ms'
                 : 'N/A',
           ),
           _dataRow(
             context,
             attribute: 'Send Timeout',
-            value: api.sendTimeout.isNotZero ? '${api.sendTimeout} ms' : 'N/A',
+            value: api.sendTimeout!.isNotZero ? '${api.sendTimeout} ms' : 'N/A',
           ),
         ],
       ),

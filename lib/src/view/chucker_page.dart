@@ -1,6 +1,6 @@
 import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
 import 'package:chucker_flutter/src/localization/localization.dart';
-import 'package:chucker_flutter/src/models/api_response.dart';
+import 'package:chucker_flutter/src/models/api_response_db.dart';
 import 'package:chucker_flutter/src/view/api_detail_page.dart';
 import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
 import 'package:chucker_flutter/src/view/helper/colors.dart';
@@ -28,7 +28,7 @@ class ChuckerPage extends StatefulWidget {
 class _ChuckerPageState extends State<ChuckerPage> {
   var _httpMethod = ChuckerUiHelper.settings.httpMethod;
 
-  List<ApiResponse> _apis = List.empty();
+  List<ApiResponseDb> _apis = List.empty();
 
   var _query = '';
 
@@ -44,8 +44,8 @@ class _ChuckerPageState extends State<ChuckerPage> {
   ];
 
   Future<void> _init() async {
-    final sharedPreferencesManager = widget.storageManager;
-    _apis = await sharedPreferencesManager.getAllApiResponses();
+    final storageManager = widget.storageManager;
+    _apis = await storageManager.getAllApiResponses();
     setState(() {});
   }
 
@@ -168,47 +168,47 @@ class _ChuckerPageState extends State<ChuckerPage> {
 
   int get _remaingRequests => ChuckerUiHelper.settings.apiThresholds! - _apis.length;
 
-  List<ApiResponse> _successApis({bool filterApply = true}) {
+  List<ApiResponseDb> _successApis({bool filterApply = true}) {
     final query = _query.toLowerCase();
     return _apis.where((element) {
-      var success = element.statusCode > 199 && element.statusCode < 300;
-      final methodFilter = element.method.toLowerCase() == _httpMethod!.name;
+      var success = element.statusCode! > 199 && element.statusCode! < 300;
+      final methodFilter = element.method!.toLowerCase() == _httpMethod!.name;
       if (filterApply) {
         success = success && (_httpMethod == HttpMethod.none || methodFilter);
         if (query.isEmpty) {
           return success;
         }
         return success &&
-            (element.baseUrl.toLowerCase().contains(query) ||
+            (element.baseUrl!.toLowerCase().contains(query) ||
                 element.statusCode.toString().contains(query) ||
-                element.path.toLowerCase().contains(query) ||
+                element.path!.toLowerCase().contains(query) ||
                 element.requestTime.toString().contains(query));
       }
       return success;
     }).toList();
   }
 
-  List<ApiResponse> _failedApis({bool filterApply = true}) {
+  List<ApiResponseDb> _failedApis({bool filterApply = true}) {
     final query = _query.toLowerCase();
     return _apis.where((element) {
-      var failed = element.statusCode < 200 || element.statusCode > 299;
-      final methodFilter = element.method.toLowerCase() == _httpMethod!.name;
+      var failed = element.statusCode! < 200 || element.statusCode! > 299;
+      final methodFilter = element.method!.toLowerCase() == _httpMethod!.name;
       if (filterApply) {
         failed = failed && (_httpMethod == HttpMethod.none || methodFilter);
         if (query.isEmpty) {
           return failed;
         }
         return failed &&
-            (element.baseUrl.toLowerCase().contains(query) ||
+            (element.baseUrl!.toLowerCase().contains(query) ||
                 element.statusCode.toString().contains(query) ||
-                element.path.toLowerCase().contains(query) ||
+                element.path!.toLowerCase().contains(query) ||
                 element.requestTime.toString().contains(query));
       }
       return failed;
     }).toList();
   }
 
-  List<ApiResponse> get _selectedApis => _apis.where((e) => e.checked).toList();
+  List<ApiResponseDb> get _selectedApis => _apis.where((e) => e.checked!).toList();
 
   Future<void> _deleteAnApi(String dateTime) async {
     var deleteConfirm = true;
@@ -245,7 +245,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
     }
     if (deleteConfirm) {
       final dateTimes = _selectedApis
-          .where((e) => e.checked)
+          .where((e) => e.checked!)
           .map((e) => e.requestTime.toString())
           .toList();
       final sharedPreferencesManager = widget.storageManager;
@@ -263,7 +263,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
       _apis = _apis
           .map(
             (e) => e.requestTime.toString() == dateTime
-                ? e.copyWith(checked: !e.checked)
+                ? e.copyWith(checked: !e.checked!)
                 : e,
           )
           .toList();
@@ -291,7 +291,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
     );
   }
 
-  void _openDetails(ApiResponse api) {
+  void _openDetails(ApiResponseDb api) {
     ChuckerFlutter.navigatorObserver.navigator?.push(
       MaterialPageRoute(builder: (_) => ApiDetailsPage(api: api)),
     );

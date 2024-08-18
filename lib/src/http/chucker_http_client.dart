@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:chucker_flutter/src/helpers/constants.dart';
 import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
-import 'package:chucker_flutter/src/models/api_response.dart';
+import 'package:chucker_flutter/src/models/api_response_db.dart';
 import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
 import 'package:http/http.dart';
 
@@ -115,8 +115,8 @@ class ChuckerHttpClient extends BaseClient {
     } catch (e) {}
 
     await _storageManager.addApiResponse(
-      ApiResponse(
-        body: {'data': responseBody},
+      ApiResponseDb(
+        bodyMap: json.encode({'data': responseBody}),
         path: request.url.path,
         baseUrl: request.url.origin,
         method: request.method,
@@ -126,7 +126,7 @@ class ChuckerHttpClient extends BaseClient {
         headers: request.headers.toString(),
         queryParameters: request.url.queryParameters.toString(),
         receiveTimeout: 0,
-        request: {'request': requestBody},
+        requestMap: json.encode({'request': requestBody}),
         requestSize: request.contentLength?.toDouble() ?? 0,
         requestTime: _requestTime,
         responseSize: contentLength,

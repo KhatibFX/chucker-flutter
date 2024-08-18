@@ -1,5 +1,5 @@
 import 'package:chucker_flutter/src/localization/localization.dart';
-import 'package:chucker_flutter/src/models/api_response.dart';
+import 'package:chucker_flutter/src/models/api_response_db.dart';
 import 'package:chucker_flutter/src/view/widgets/apis_listing_item.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +16,7 @@ class ApisListingTabView extends StatefulWidget {
   }) : super(key: key);
 
   ///The list of [ApiResponse] that to be shown in this page
-  final List<ApiResponse> apis;
+  final List<ApiResponseDb> apis;
 
   ///Callback to delete a request
   final void Function(String) onDelete;
@@ -28,7 +28,7 @@ class ApisListingTabView extends StatefulWidget {
   final bool showDelete;
 
   ///Callback when this instance is pressed
-  final void Function(ApiResponse api) onItemPressed;
+  final void Function(ApiResponseDb api) onItemPressed;
 
   @override
   State<ApisListingTabView> createState() => _ApisListingTabViewState();
@@ -46,13 +46,13 @@ class _ApisListingTabViewState extends State<ApisListingTabView> {
       itemBuilder: (_, i) {
         final api = widget.apis[i];
         return ApisListingItemWidget(
-          baseUrl: api.baseUrl,
-          dateTime: api.requestTime,
-          method: api.method,
-          path: api.path,
-          statusCode: api.statusCode,
+          baseUrl: api.baseUrl!,
+          dateTime: api.requestTime!,
+          method: api.method!,
+          path: api.path!,
+          statusCode: api.statusCode!,
           onDelete: widget.onDelete,
-          checked: api.checked,
+          checked: api.checked!,
           onChecked: widget.onChecked,
           showDelete: widget.showDelete,
           onPressed: () => widget.onItemPressed(api),

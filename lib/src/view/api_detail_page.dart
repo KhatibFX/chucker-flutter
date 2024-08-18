@@ -1,7 +1,7 @@
 import 'package:chucker_flutter/src/helpers/extensions.dart';
 import 'package:chucker_flutter/src/localization/localization.dart';
 
-import 'package:chucker_flutter/src/models/api_response.dart';
+import 'package:chucker_flutter/src/models/api_response_db.dart';
 import 'package:chucker_flutter/src/view/helper/colors.dart';
 import 'package:chucker_flutter/src/view/json_tree/json_tree.dart';
 import 'package:chucker_flutter/src/view/tabs/overview.dart';
@@ -18,7 +18,7 @@ class ApiDetailsPage extends StatefulWidget {
   const ApiDetailsPage({required this.api, Key? key}) : super(key: key);
 
   ///[ApiResponse] of which detail is to be shown
-  final ApiResponse api;
+  final ApiResponseDb api;
 
   @override
   State<ApiDetailsPage> createState() => _ApiDetailsPageState();
