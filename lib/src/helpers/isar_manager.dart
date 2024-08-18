@@ -5,8 +5,6 @@ import 'package:chucker_flutter/src/models/settings_db.dart';
 import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
 import 'package:isar/isar.dart';
 
-const String _isarDbName = 'chucker.db';
-
 class IsarManager implements IStorageManager {
   IsarManager._() {
     getSettings();
@@ -15,13 +13,8 @@ class IsarManager implements IStorageManager {
   static final IsarManager instance = IsarManager._();
   Isar? _isar;
 
-  Future<void> initIsar(String dbPath) async {
-    _isar = Isar.getInstance(_isarDbName) ??
-        await Isar.open(
-          [SettingsDbSchema, ApiResponseDbSchema],
-          directory: dbPath,
-          name: _isarDbName,
-        );
+  Future<void> initIsar({Isar? isarInstance}) async {
+    _isar = isarInstance ?? Isar.getInstance();
   }
 
   @override
