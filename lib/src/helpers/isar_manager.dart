@@ -14,7 +14,7 @@ class IsarManager implements IStorageManager {
   Isar? _isar;
 
   Future<void> initIsar(String dbPath) async {
-    _isar = await Isar.open(
+    _isar ??= await Isar.open(
       [SettingsDbSchema, ApiResponseDbSchema],
       directory: dbPath,
     );
