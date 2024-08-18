@@ -11,9 +11,10 @@ part 'api_response_db.g.dart';
 @Name("ApiResponse")
 class ApiResponseDb with _$ApiResponseDb {
   const ApiResponseDb._();
+
   const factory ApiResponseDb({
     int? dbId,
-    DateTime? requestTime,
+    @Index() DateTime? requestTime,
     DateTime? responseTime,
     String? baseUrl,
     String? path,
@@ -35,6 +36,7 @@ class ApiResponseDb with _$ApiResponseDb {
     String? clientLibrary,
   }) = _ApiResponseDb;
 
+  @ignore
   factory ApiResponseDb.mock() => _ApiResponseDb(
         bodyMap: json.encode({'': ''}),
         baseUrl: '',
@@ -59,21 +61,26 @@ class ApiResponseDb with _$ApiResponseDb {
 
   Id? get id => dbId;
 
+  @ignore
   Map<String, dynamic> get request {
     return requestMap != null ? jsonDecode(requestMap!) : {};
   }
 
+  @ignore
   Map<String, dynamic> get body {
     return bodyMap != null ? jsonDecode(bodyMap!) : {};
   }
 
+  @ignore
   String get prettyJson {
     return const JsonEncoder.withIndent('     ').convert(body);
   }
 
+  @ignore
   String get prettyJsonRequest {
     return const JsonEncoder.withIndent('     ').convert(request);
   }
 
-  factory ApiResponseDb.fromJson(Map<String, dynamic> json) => _$ApiResponseDbFromJson(json);
+  factory ApiResponseDb.fromJson(Map<String, dynamic> json) =>
+      _$ApiResponseDbFromJson(json);
 }

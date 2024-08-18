@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 ///[SharedPreferencesManager] handles storage of chucker data on user's disk
 class SharedPreferencesManager implements IStorageManager {
   SharedPreferencesManager._() {
-      getSettings();
+    getSettings();
   }
 
   static final SharedPreferencesManager instance = SharedPreferencesManager._();
@@ -65,9 +65,9 @@ class SharedPreferencesManager implements IStorageManager {
 
   ///[deleteAnApi] deletes an api record from local disk
   @override
-  Future<void> deleteAnApi(String dateTime) async {
+  Future<void> deleteAnApi(DateTime dateTime) async {
     final apis = await getAllApiResponses();
-    apis.removeWhere((e) => e.requestTime.toString() == dateTime);
+    apis.removeWhere((e) => e.requestTime == dateTime);
 
     final preferences = await SharedPreferences.getInstance();
 
@@ -77,11 +77,11 @@ class SharedPreferencesManager implements IStorageManager {
     );
   }
 
-  ///[deleteAnApi] deletes an api record from local disk
+  ///[deleteSelected] deletes an api record from local disk
   @override
-  Future<void> deleteSelected(List<String> dateTimes) async {
+  Future<void> deleteSelected(List<DateTime> dateTimes) async {
     final apis = await getAllApiResponses();
-    apis.removeWhere((e) => dateTimes.contains(e.requestTime.toString()));
+    apis.removeWhere((e) => dateTimes.contains(e.requestTime));
 
     final preferences = await SharedPreferences.getInstance();
 
@@ -126,7 +126,7 @@ class SharedPreferencesManager implements IStorageManager {
     return settings;
   }
 
-  ///[getAllApiResponses] returns single api response at given time
+  ///[getApiResponse] returns single api response at given time
   @override
   Future<ApiResponseDb> getApiResponse(DateTime time) async {
     final apiResponses = List<ApiResponseDb>.empty(growable: true);

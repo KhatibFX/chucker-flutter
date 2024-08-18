@@ -12,6 +12,7 @@ part 'settings_db.g.dart';
 @Name("Settings")
 class SettingsDb with _$SettingsDb {
   const SettingsDb._();
+
   const factory SettingsDb({
     int? dbId,
     int? durationMilliseconds,
@@ -20,19 +21,17 @@ class SettingsDb with _$SettingsDb {
     double? positionRight,
     double? positionLeft,
     int? apiThresholds,
-    @enumerated
-    HttpMethod? httpMethod,
+    @Enumerated(EnumType.ordinal32) HttpMethod? httpMethod,
     bool? showRequestsStats,
     bool? showNotification,
     bool? showDeleteConfirmDialog,
-    @enumerated
-    Language? language,
+    @Enumerated(EnumType.ordinal32) Language? language,
   }) = _SettingsDb;
 
+  @ignore
   factory SettingsDb.defaultObject() => _SettingsDb(
         dbId: 1,
         durationMilliseconds: 2000,
-        // notificationAlignment: Alignment.bottomCenter,
         apiThresholds: 100,
         httpMethod: HttpMethod.none,
         showNotification: true,
@@ -46,9 +45,13 @@ class SettingsDb with _$SettingsDb {
       );
 
   Id? get id => dbId;
+
+  @ignore
   Alignment get notificationAlignment => Alignment.bottomCenter;
+
+  @ignore
   Duration get duration => Duration(milliseconds: durationMilliseconds!);
 
-
-  factory SettingsDb.fromJson(Map<String, dynamic> json) => _$SettingsDbFromJson(json);
+  factory SettingsDb.fromJson(Map<String, dynamic> json) =>
+      _$SettingsDbFromJson(json);
 }

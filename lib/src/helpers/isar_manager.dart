@@ -6,7 +6,6 @@ import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
 import 'package:isar/isar.dart';
 
 class IsarManager implements IStorageManager {
-
   IsarManager._() {
     getSettings();
   }
@@ -16,39 +15,66 @@ class IsarManager implements IStorageManager {
 
   Future<void> initIsar(String dbPath) async {
     _isar = await Isar.open(
-      [SettingsDbSchema],
+      [SettingsDbSchema, ApiResponseDbSchema],
       directory: dbPath,
     );
   }
 
   @override
-  Future<void> addApiResponse(ApiResponseDb apiResponse) {
-    // TODO: implement addApiResponse
-    throw UnimplementedError();
+  Future<void> addApiResponse(ApiResponseDb apiResponse) async {
+    final newResponses = List<ApiResponseDb>.empty(growable: true);
+
+    final previousResponses = await getAllApiResponses();
+
+    if (previousResponses.length == ChuckerUiHelper.settings.apiThresholds) {
+      previousResponses.removeAt(previousResponses.length - 1);
+    }
+
+    newResponses
+      ..addAll(previousResponses)
+      ..add(apiResponse);
+
+    await _isar?.writeTxn(() async {
+      await _isar?.apiResponseDbs.clear();
+      await _isar?.apiResponseDbs.putAll(newResponses);
+    });
   }
 
   @override
-  Future<void> deleteAnApi(String dateTime) {
-    // TODO: implement deleteAnApi
-    throw UnimplementedError();
+  Future<List<ApiResponseDb>> getAllApiResponses() async {
+    final apiResponses = List<ApiResponseDb>.empty(growable: true);
+    apiResponses.addAll(await _isar!.apiResponseDbs.where().findAll());
+    apiResponses.sort((a, b) => b.requestTime!.compareTo(a.requestTime!));
+    return apiResponses;
   }
 
   @override
-  Future<void> deleteSelected(List<String> dateTimes) {
-    // TODO: implement deleteSelected
-    throw UnimplementedError();
+  Future<void> deleteAnApi(DateTime dateTime) async {
+    await _isar?.writeTxn(() async {
+      await _isar?.apiResponseDbs
+          .where()
+          .requestTimeEqualTo(dateTime)
+          .deleteAll();
+    });
   }
 
   @override
-  Future<List<ApiResponseDb>> getAllApiResponses() {
-    // TODO: implement getAllApiResponses
-    throw UnimplementedError();
+  Future<void> deleteSelected(List<DateTime> dateTimes) async {
+    await _isar?.writeTxn(() async {
+      await _isar?.apiResponseDbs
+          .where()
+          .anyOf(
+              dateTimes, (q, DateTime element) => q.requestTimeEqualTo(element))
+          .deleteAll();
+    });
   }
 
   @override
-  Future<ApiResponseDb> getApiResponse(DateTime time) {
-    // TODO: implement getApiResponse
-    throw UnimplementedError();
+  Future<void> setSettings(SettingsDb settings) async {
+    await _isar?.writeTxn(() async {
+      await _isar?.settingsDbs.put(settings);
+    });
+    ChuckerUiHelper.settings = settings;
   }
 
   @override
@@ -66,11 +92,11 @@ class IsarManager implements IStorageManager {
   }
 
   @override
-  Future<void> setSettings(SettingsDb settings) async {
-
-    await _isar?.writeTxn(() async {
-      await _isar?.settingsDbs.put(settings);
-    });
-    ChuckerUiHelper.settings = settings;
+  Future<ApiResponseDb> getApiResponse(DateTime time) async {
+    return (await _isar!.apiResponseDbs
+            .where()
+            .requestTimeEqualTo(time)
+            .findFirst()) ??
+        ApiResponseDb.mock();
   }
 }

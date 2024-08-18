@@ -21,6 +21,7 @@ ApiResponseDb _$ApiResponseDbFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ApiResponseDb {
   int? get dbId => throw _privateConstructorUsedError;
+  @Index()
   DateTime? get requestTime => throw _privateConstructorUsedError;
   DateTime? get responseTime => throw _privateConstructorUsedError;
   String? get baseUrl => throw _privateConstructorUsedError;
@@ -56,7 +57,7 @@ abstract class $ApiResponseDbCopyWith<$Res> {
   @useResult
   $Res call(
       {int? dbId,
-      DateTime? requestTime,
+      @Index() DateTime? requestTime,
       DateTime? responseTime,
       String? baseUrl,
       String? path,
@@ -212,7 +213,7 @@ abstract class _$$_ApiResponseDbCopyWith<$Res>
   @useResult
   $Res call(
       {int? dbId,
-      DateTime? requestTime,
+      @Index() DateTime? requestTime,
       DateTime? responseTime,
       String? baseUrl,
       String? path,
@@ -361,7 +362,7 @@ class __$$_ApiResponseDbCopyWithImpl<$Res>
 class _$_ApiResponseDb extends _ApiResponseDb {
   const _$_ApiResponseDb(
       {this.dbId,
-      this.requestTime,
+      @Index() this.requestTime,
       this.responseTime,
       this.baseUrl,
       this.path,
@@ -389,6 +390,7 @@ class _$_ApiResponseDb extends _ApiResponseDb {
   @override
   final int? dbId;
   @override
+  @Index()
   final DateTime? requestTime;
   @override
   final DateTime? responseTime;
@@ -520,7 +522,7 @@ class _$_ApiResponseDb extends _ApiResponseDb {
 abstract class _ApiResponseDb extends ApiResponseDb {
   const factory _ApiResponseDb(
       {final int? dbId,
-      final DateTime? requestTime,
+      @Index() final DateTime? requestTime,
       final DateTime? responseTime,
       final String? baseUrl,
       final String? path,
@@ -548,6 +550,7 @@ abstract class _ApiResponseDb extends ApiResponseDb {
   @override
   int? get dbId;
   @override
+  @Index()
   DateTime? get requestTime;
   @override
   DateTime? get responseTime;

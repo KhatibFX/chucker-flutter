@@ -166,7 +166,8 @@ class _ChuckerPageState extends State<ChuckerPage> {
     );
   }
 
-  int get _remaingRequests => ChuckerUiHelper.settings.apiThresholds! - _apis.length;
+  int get _remaingRequests =>
+      ChuckerUiHelper.settings.apiThresholds! - _apis.length;
 
   List<ApiResponseDb> _successApis({bool filterApply = true}) {
     final query = _query.toLowerCase();
@@ -208,9 +209,10 @@ class _ChuckerPageState extends State<ChuckerPage> {
     }).toList();
   }
 
-  List<ApiResponseDb> get _selectedApis => _apis.where((e) => e.checked!).toList();
+  List<ApiResponseDb> get _selectedApis =>
+      _apis.where((e) => e.checked!).toList();
 
-  Future<void> _deleteAnApi(String dateTime) async {
+  Future<void> _deleteAnApi(DateTime dateTime) async {
     var deleteConfirm = true;
     if (ChuckerUiHelper.settings.showDeleteConfirmDialog!) {
       deleteConfirm = await showConfirmationDialog(
@@ -223,8 +225,8 @@ class _ChuckerPageState extends State<ChuckerPage> {
           false;
     }
     if (deleteConfirm) {
-      final sharedPreferencesManager = widget.storageManager;
-      await sharedPreferencesManager.deleteAnApi(dateTime);
+      final storageManager = widget.storageManager;
+      await storageManager.deleteAnApi(dateTime);
       setState(
         () => _apis.removeWhere((e) => e.requestTime.toString() == dateTime),
       );
@@ -246,7 +248,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
     if (deleteConfirm) {
       final dateTimes = _selectedApis
           .where((e) => e.checked!)
-          .map((e) => e.requestTime.toString())
+          .map((e) => e.requestTime!)
           .toList();
       final sharedPreferencesManager = widget.storageManager;
       await sharedPreferencesManager.deleteSelected(dateTimes);
@@ -258,7 +260,7 @@ class _ChuckerPageState extends State<ChuckerPage> {
     }
   }
 
-  void _selectAnApi(String dateTime) {
+  void _selectAnApi(DateTime dateTime) {
     setState(() {
       _apis = _apis
           .map(
@@ -287,7 +289,8 @@ class _ChuckerPageState extends State<ChuckerPage> {
 
   void _openSettings(IStorageManager storageManager) {
     ChuckerFlutter.navigatorObserver.navigator?.push(
-      MaterialPageRoute(builder: (_) => SettingsPage(storageManager: storageManager)),
+      MaterialPageRoute(
+          builder: (_) => SettingsPage(storageManager: storageManager)),
     );
   }
 
@@ -303,6 +306,7 @@ class _TabModel {
     required this.label,
     required this.icon,
   });
+
   final String label;
   final Widget icon;
 }

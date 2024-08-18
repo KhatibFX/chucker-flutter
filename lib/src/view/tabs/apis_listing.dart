@@ -19,10 +19,10 @@ class ApisListingTabView extends StatefulWidget {
   final List<ApiResponseDb> apis;
 
   ///Callback to delete a request
-  final void Function(String) onDelete;
+  final void Function(DateTime) onDelete;
 
   ///Callback to select a request
-  final void Function(String) onChecked;
+  final void Function(DateTime) onChecked;
 
   ///Whether to hide or show delete button
   final bool showDelete;

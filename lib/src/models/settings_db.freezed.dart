@@ -27,12 +27,12 @@ mixin _$SettingsDb {
   double? get positionRight => throw _privateConstructorUsedError;
   double? get positionLeft => throw _privateConstructorUsedError;
   int? get apiThresholds => throw _privateConstructorUsedError;
-  @enumerated
+  @Enumerated(EnumType.ordinal32)
   HttpMethod? get httpMethod => throw _privateConstructorUsedError;
   bool? get showRequestsStats => throw _privateConstructorUsedError;
   bool? get showNotification => throw _privateConstructorUsedError;
   bool? get showDeleteConfirmDialog => throw _privateConstructorUsedError;
-  @enumerated
+  @Enumerated(EnumType.ordinal32)
   Language? get language => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -55,11 +55,11 @@ abstract class $SettingsDbCopyWith<$Res> {
       double? positionRight,
       double? positionLeft,
       int? apiThresholds,
-      @enumerated HttpMethod? httpMethod,
+      @Enumerated(EnumType.ordinal32) HttpMethod? httpMethod,
       bool? showRequestsStats,
       bool? showNotification,
       bool? showDeleteConfirmDialog,
-      @enumerated Language? language});
+      @Enumerated(EnumType.ordinal32) Language? language});
 }
 
 /// @nodoc
@@ -157,11 +157,11 @@ abstract class _$$_SettingsDbCopyWith<$Res>
       double? positionRight,
       double? positionLeft,
       int? apiThresholds,
-      @enumerated HttpMethod? httpMethod,
+      @Enumerated(EnumType.ordinal32) HttpMethod? httpMethod,
       bool? showRequestsStats,
       bool? showNotification,
       bool? showDeleteConfirmDialog,
-      @enumerated Language? language});
+      @Enumerated(EnumType.ordinal32) Language? language});
 }
 
 /// @nodoc
@@ -252,11 +252,11 @@ class _$_SettingsDb extends _SettingsDb {
       this.positionRight,
       this.positionLeft,
       this.apiThresholds,
-      @enumerated this.httpMethod,
+      @Enumerated(EnumType.ordinal32) this.httpMethod,
       this.showRequestsStats,
       this.showNotification,
       this.showDeleteConfirmDialog,
-      @enumerated this.language})
+      @Enumerated(EnumType.ordinal32) this.language})
       : super._();
 
   factory _$_SettingsDb.fromJson(Map<String, dynamic> json) =>
@@ -277,7 +277,7 @@ class _$_SettingsDb extends _SettingsDb {
   @override
   final int? apiThresholds;
   @override
-  @enumerated
+  @Enumerated(EnumType.ordinal32)
   final HttpMethod? httpMethod;
   @override
   final bool? showRequestsStats;
@@ -286,7 +286,7 @@ class _$_SettingsDb extends _SettingsDb {
   @override
   final bool? showDeleteConfirmDialog;
   @override
-  @enumerated
+  @Enumerated(EnumType.ordinal32)
   final Language? language;
 
   @override
@@ -358,18 +358,19 @@ class _$_SettingsDb extends _SettingsDb {
 
 abstract class _SettingsDb extends SettingsDb {
   const factory _SettingsDb(
-      {final int? dbId,
-      final int? durationMilliseconds,
-      final double? positionTop,
-      final double? positionBottom,
-      final double? positionRight,
-      final double? positionLeft,
-      final int? apiThresholds,
-      @enumerated final HttpMethod? httpMethod,
-      final bool? showRequestsStats,
-      final bool? showNotification,
-      final bool? showDeleteConfirmDialog,
-      @enumerated final Language? language}) = _$_SettingsDb;
+          {final int? dbId,
+          final int? durationMilliseconds,
+          final double? positionTop,
+          final double? positionBottom,
+          final double? positionRight,
+          final double? positionLeft,
+          final int? apiThresholds,
+          @Enumerated(EnumType.ordinal32) final HttpMethod? httpMethod,
+          final bool? showRequestsStats,
+          final bool? showNotification,
+          final bool? showDeleteConfirmDialog,
+          @Enumerated(EnumType.ordinal32) final Language? language}) =
+      _$_SettingsDb;
   const _SettingsDb._() : super._();
 
   factory _SettingsDb.fromJson(Map<String, dynamic> json) =
@@ -390,7 +391,7 @@ abstract class _SettingsDb extends SettingsDb {
   @override
   int? get apiThresholds;
   @override
-  @enumerated
+  @Enumerated(EnumType.ordinal32)
   HttpMethod? get httpMethod;
   @override
   bool? get showRequestsStats;
@@ -399,7 +400,7 @@ abstract class _SettingsDb extends SettingsDb {
   @override
   bool? get showDeleteConfirmDialog;
   @override
-  @enumerated
+  @Enumerated(EnumType.ordinal32)
   Language? get language;
   @override
   @JsonKey(ignore: true)

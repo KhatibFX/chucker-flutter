@@ -5,7 +5,6 @@ repository: https://github.com/syedmurtaza108/chucker-flutter
 issue_tracker: https://github.com/syedmurtaza108/chucker-flutter/issues
 funding:
   - https://www.patreon.com/syedmurtaza
-isar_version: &isar_version 3.1.0+1
 
 environment:
   sdk: ">=2.16.0 <3.0.0"
@@ -21,8 +20,8 @@ dependencies:
   http_mock_adapter: ^0.3.2
   share_plus: ^5.0.0
   shared_preferences: ^2.0.13
-  isar: *isar_version
-  isar_flutter_libs: *isar_version # contains Isar Core
+  isar: ^3.1.0+1
+  isar_flutter_libs: ^3.1.0+1
   freezed_annotation: ^2.2.0
   json_annotation: ^4.7.0
 
@@ -30,8 +29,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   very_good_analysis: ^2.4.0
-  isar_generator: *isar_version
+  flutter_lints: ^2.0.0
   build_runner: ^2.3.2
   freezed: ^2.3.2
-  # Json serialization generator
-  json_serializable: ^6.4.0
+  json_serializable: ^6.5.4
+  isar_generator: ^3.1.0+1

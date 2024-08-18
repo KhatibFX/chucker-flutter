@@ -1,7 +1,5 @@
 import 'package:chucker_flutter/src/helpers/extensions.dart';
 import 'package:chucker_flutter/src/localization/localization.dart';
-
-import 'package:chucker_flutter/src/models/api_response.dart';
 import 'package:chucker_flutter/src/view/helper/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -40,13 +38,13 @@ class ApisListingItemWidget extends StatelessWidget {
   final DateTime dateTime;
 
   ///Callback to delete a request
-  final void Function(String) onDelete;
+  final void Function(DateTime) onDelete;
 
   ///Used for selection
   final bool checked;
 
   ///Callback to select a request
-  final void Function(String) onChecked;
+  final void Function(DateTime) onChecked;
 
   ///Whether to hide or show delete button
   final bool showDelete;
@@ -80,7 +78,7 @@ class ApisListingItemWidget extends StatelessWidget {
                   Visibility(
                     visible: showDelete,
                     child: TextButton(
-                      onPressed: () => onDelete(dateTime.toString()),
+                      onPressed: () => onDelete(dateTime),
                       child: Text(
                         Localization.strings['delete']!,
                         style: context.textTheme.caption!.withColor(Colors.red),
@@ -110,7 +108,7 @@ class ApisListingItemWidget extends StatelessWidget {
                       Checkbox(
                         value: checked,
                         activeColor: Colors.green,
-                        onChanged: (_) => onChecked(dateTime.toString()),
+                        onChanged: (_) => onChecked(dateTime),
                       )
                     ],
                   ),
