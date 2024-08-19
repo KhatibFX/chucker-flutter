@@ -3,7 +3,6 @@ import 'package:chucker_flutter/src/localization/localization.dart';
 import 'package:chucker_flutter/src/models/api_response_db.dart';
 import 'package:chucker_flutter/src/models/settings_db.dart';
 import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
-import 'package:flutter/widgets.dart';
 import 'package:isar/isar.dart';
 
 Isar? _isar;
@@ -21,7 +20,6 @@ class IsarManager implements IStorageManager {
 
   @override
   Future<void> addApiResponse(ApiResponseDb apiResponse) async {
-    debugPrint('Adding api response to isar: $apiResponse', wrapWidth: 1024);
     final newResponses = List<ApiResponseDb>.empty(growable: true);
 
     final previousResponses = await getAllApiResponses();
@@ -38,9 +36,6 @@ class IsarManager implements IStorageManager {
       await _isar?.apiResponseDbs.clear();
       await _isar?.apiResponseDbs.putAll(newResponses);
     });
-    // confirm that the api response has been added
-    final allApiResponses = await getAllApiResponses();
-    debugPrint("Number of cached responses: ${allApiResponses.length}");
   }
 
   @override
