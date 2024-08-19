@@ -5,13 +5,14 @@ import 'package:chucker_flutter/src/models/settings_db.dart';
 import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
 import 'package:isar/isar.dart';
 
+Isar? _isar;
+
 class IsarManager implements IStorageManager {
   IsarManager._() {
     getSettings();
   }
 
   static final IsarManager instance = IsarManager._();
-  Isar? _isar;
 
   Future<void> initIsar({Isar? isarInstance}) async {
     _isar = isarInstance ?? Isar.getInstance();
