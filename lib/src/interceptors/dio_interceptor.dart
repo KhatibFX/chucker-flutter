@@ -5,7 +5,6 @@ import 'package:chucker_flutter/src/helpers/i_storage_manager.dart';
 import 'package:chucker_flutter/src/models/api_response_db.dart';
 import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/widgets.dart';
 
 ///[ChuckerDioInterceptor] adds support for `chucker_flutter` in [Dio] library.
 class ChuckerDioInterceptor extends Interceptor {
@@ -34,19 +33,15 @@ class ChuckerDioInterceptor extends Interceptor {
       handler.next(response);
       return;
     }
-    try {
-      ChuckerUiHelper.showNotification(
-        method: response.requestOptions.method,
-        statusCode: response.statusCode ?? -1,
-        path: response.requestOptions.path,
-        requestTime: _requestTime,
-        storageManager: _storageManager,
-      );
-      await _saveResponse(response);
-      handler.next(response);
-    } catch (e, s) {
-      debugPrint('Error in onResponse: $e, $s', wrapWidth: 1024);
-    }
+    ChuckerUiHelper.showNotification(
+      method: response.requestOptions.method,
+      statusCode: response.statusCode ?? -1,
+      path: response.requestOptions.path,
+      requestTime: _requestTime,
+      storageManager: _storageManager,
+    );
+    await _saveResponse(response);
+    handler.next(response);
   }
 
   @override
