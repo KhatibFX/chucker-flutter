@@ -34,16 +34,19 @@ class ChuckerDioInterceptor extends Interceptor {
       handler.next(response);
       return;
     }
-    debugPrint("Showing notification for API response");
-    ChuckerUiHelper.showNotification(
-      method: response.requestOptions.method,
-      statusCode: response.statusCode ?? -1,
-      path: response.requestOptions.path,
-      requestTime: _requestTime,
-      storageManager: _storageManager,
-    );
-    await _saveResponse(response);
-    handler.next(response);
+    try {
+      ChuckerUiHelper.showNotification(
+        method: response.requestOptions.method,
+        statusCode: response.statusCode ?? -1,
+        path: response.requestOptions.path,
+        requestTime: _requestTime,
+        storageManager: _storageManager,
+      );
+      await _saveResponse(response);
+      handler.next(response);
+    } catch (e, s) {
+      debugPrint('Error in onResponse: $e, $s', wrapWidth: 1024);
+    }
   }
 
   @override
