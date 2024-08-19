@@ -40,7 +40,7 @@ class IsarManager implements IStorageManager {
     });
     // confirm that the api response has been added
     final allApiResponses = await getAllApiResponses();
-    debugPrint('All api responses: $allApiResponses', wrapWidth: 1024);
+    debugPrint("Number of cached responses: ${allApiResponses.length}");
   }
 
   @override
