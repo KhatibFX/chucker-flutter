@@ -20,9 +20,7 @@ class __JsonObjectState extends State<_JsonObject> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: widget.showPadding
-          ? const EdgeInsetsDirectional.only(start: 16)
-          : EdgeInsets.zero,
+      padding: widget.showPadding ? const EdgeInsetsDirectional.only(start: 16) : EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: List.generate(
@@ -37,8 +35,7 @@ class __JsonObjectState extends State<_JsonObject> {
                   children: [
                     Visibility(
                       visible: canExpand && (open[entry.key] ?? false),
-                      child:
-                          const Icon(Icons.arrow_drop_down_rounded, size: 24),
+                      child: const Icon(Icons.arrow_drop_down_rounded, size: 24),
                     ),
                     Visibility(
                       visible: canExpand && !(open[entry.key] ?? false),
@@ -54,7 +51,7 @@ class __JsonObjectState extends State<_JsonObject> {
                           });
                         },
                         text: entry.key,
-                        style: context.textTheme.bodyText1!.toBold(),
+                        style: context.textTheme.bodyLarge!.toBold(),
                       ),
                     ),
                     Visibility(
@@ -65,7 +62,7 @@ class __JsonObjectState extends State<_JsonObject> {
                       visible: !canExpand || !button,
                       child: Text(
                         '${entry.key}:',
-                        style: context.textTheme.bodyText2!.toBold(),
+                        style: context.textTheme.bodyMedium!.toBold(),
                       ),
                     ),
                     const SizedBox(width: 4),
@@ -82,7 +79,7 @@ class __JsonObjectState extends State<_JsonObject> {
                 Visibility(
                   visible: open[entry.key] ?? false,
                   child: _JsonRoot(rootObject: entry.value, showPadding: true),
-                )
+                ),
               ],
             );
           },

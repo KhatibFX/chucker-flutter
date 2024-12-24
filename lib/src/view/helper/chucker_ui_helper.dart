@@ -32,8 +32,7 @@ class ChuckerUiHelper {
     required DateTime requestTime,
     required IStorageManager storageManager,
   }) {
-    if (ChuckerUiHelper.settings.showNotification! &&
-        ChuckerFlutter.navigatorObserver.navigator != null) {
+    if (ChuckerUiHelper.settings.showNotification! && ChuckerFlutter.navigatorObserver.navigator != null) {
       final overlay = ChuckerFlutter.navigatorObserver.navigator!.overlay;
       final _entry = _createOverlayEntry(method, statusCode, path, requestTime, storageManager);
       _overlayEntries.add(_entry);
@@ -83,7 +82,7 @@ class ChuckerUiHelper {
   static void showChuckerScreen(IStorageManager storageManager) {
     storageManager.getSettings();
     ChuckerFlutter.navigatorObserver.navigator!.push(
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (context) => MaterialApp(
           key: const Key('chucker_material_app'),
           debugShowCheckedModeBanner: false,
@@ -91,11 +90,14 @@ class ChuckerUiHelper {
           supportedLocales: Localization.supportedLocales,
           locale: Localization.currentLocale,
           theme: ThemeData(
+            useMaterial3: false,
             tabBarTheme: TabBarTheme(
               labelColor: Colors.white,
-              labelStyle: context.textTheme.bodyText1,
+              labelStyle: context.textTheme.bodyLarge,
             ),
-            backgroundColor: primaryColor,
+            colorScheme: Theme.of(context).colorScheme.copyWith(
+                  surface: primaryColor,
+                ),
           ),
           home: ChuckerPage(storageManager: storageManager),
         ),

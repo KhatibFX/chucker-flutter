@@ -56,8 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
               _settingRow(
                 title: Localization.strings['duration']!,
                 description: Localization.strings['durationSettingDesc']!,
-                helperText:
-                    '''${_settings.durationMilliseconds} ${Localization.strings['milliseconds']}''',
+                helperText: '''${_settings.durationMilliseconds} ${Localization.strings['milliseconds']}''',
                 child: Slider.adaptive(
                   min: 2,
                   max: 10,
@@ -121,8 +120,7 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(height: 16),
               _settingRow(
                 title: Localization.strings['threshold']!,
-                helperText:
-                    '''${_settings.apiThresholds} ${Localization.strings['apis']}''',
+                helperText: '''${_settings.apiThresholds} ${Localization.strings['apis']}''',
                 description: Localization.strings['apiSettingDesc']!,
                 importantInfo: Localization.strings['apiSettingsImpInfo'],
                 child: Slider.adaptive(
@@ -252,12 +250,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   Text(
                     title,
-                    style: context.textTheme.bodyText2,
+                    style: context.textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     description,
-                    style: context.textTheme.caption,
+                    style: context.textTheme.bodySmall,
                   ),
                   Visibility(
                     visible: helperText != null,
@@ -267,7 +265,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     visible: helperText != null,
                     child: Text(
                       '${Localization.strings['currentValue']} $helperText',
-                      style: context.textTheme.caption!.toBold(),
+                      style: context.textTheme.bodySmall!.toBold(),
                     ),
                   ),
                 ],
@@ -298,9 +296,7 @@ class _SettingsPageState extends State<SettingsPage> {
               Expanded(
                 child: Text(
                   importantInfo ?? emptyString,
-                  style: context.textTheme.caption!
-                      .toBold()
-                      .withColor(Colors.orange),
+                  style: context.textTheme.bodySmall!.toBold().withColor(Colors.orange),
                 ),
               ),
             ],
@@ -313,7 +309,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _heading(String heading) {
     return Text(
       heading,
-      style: context.textTheme.headline6!.toBold().withColor(
+      style: context.textTheme.titleLarge!.toBold().withColor(
             primaryColor,
           ),
     );

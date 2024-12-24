@@ -31,10 +31,7 @@ class _ChuckerAppBarState extends State<ChuckerAppBar> {
       backgroundColor: primaryColor,
       title: Text(
         'Chucker Flutter',
-        style: Theme.of(context)
-            .textTheme
-            .headline5!
-            .copyWith(color: Colors.white),
+        style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white),
       ),
       leading: IconButton(
         key: const ValueKey('chucker_back_button'),

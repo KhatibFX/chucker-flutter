@@ -44,49 +44,59 @@ class _ApiDetailsPageState extends State<ApiDetailsPage> {
             ),
             IconButton(
               onPressed: () {
-                Share.share(widget.api.toString());
+                Share.share(
+                  widget.api.toString(),
+                  sharePositionOrigin: Rect.fromLTWH(
+                    0,
+                    0,
+                    MediaQuery.of(context).size.width,
+                    MediaQuery.of(context).size.height / 2,
+                  ),
+                );
               },
               icon: const Icon(Icons.share),
             ),
           ],
         ),
-        body: DefaultTabController(
-          length: 3,
-          child: Column(
-            children: [
-              Material(
-                color: primaryColor,
-                child: TabBar(
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Colors.white.withOpacity(0.8),
-                  tabs: [
-                    Tab(text: Localization.strings['overview']),
-                    Tab(text: Localization.strings['request']),
-                    Tab(text: Localization.strings['response']),
-                  ],
+        body: SafeArea(
+          child: DefaultTabController(
+            length: 3,
+            child: Column(
+              children: [
+                Material(
+                  color: primaryColor,
+                  child: TabBar(
+                    labelColor: Colors.white,
+                    unselectedLabelColor: Colors.white.withOpacity(0.8),
+                    tabs: [
+                      Tab(text: Localization.strings['overview']),
+                      Tab(text: Localization.strings['request']),
+                      Tab(text: Localization.strings['response']),
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: TabBarView(
-                  key: const Key('api_detail_tabbar_view'),
-                  children: [
-                    OverviewTabView(api: widget.api),
-                    _RequestTab(
-                      jsonPreviewType: _jsonRequestPreviewType,
-                      onShufflePreview: _shuffleRequestPreviewType,
-                      json: widget.api.request,
-                      prettyJson: widget.api.prettyJsonRequest,
-                    ),
-                    _ResponseTab(
-                      jsonPreviewType: _jsonResponsePreviewType,
-                      onShufflePreview: _shuffleResponsePreviewType,
-                      json: widget.api.body,
-                      prettyJson: widget.api.prettyJson,
-                    )
-                  ],
+                Expanded(
+                  child: TabBarView(
+                    key: const Key('api_detail_tabbar_view'),
+                    children: [
+                      OverviewTabView(api: widget.api),
+                      _RequestTab(
+                        jsonPreviewType: _jsonRequestPreviewType,
+                        onShufflePreview: _shuffleRequestPreviewType,
+                        json: widget.api.request,
+                        prettyJson: widget.api.prettyJsonRequest,
+                      ),
+                      _ResponseTab(
+                        jsonPreviewType: _jsonResponsePreviewType,
+                        onShufflePreview: _shuffleResponsePreviewType,
+                        json: widget.api.body,
+                        prettyJson: widget.api.prettyJson,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -130,9 +140,8 @@ class _PreviewModeControl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final type = jsonPreviewType == _JsonPreviewType.text
-        ? Localization.strings['text']!
-        : Localization.strings['tree']!;
+    final type =
+        jsonPreviewType == _JsonPreviewType.text ? Localization.strings['text']! : Localization.strings['tree']!;
 
     return Row(
       children: [
@@ -141,16 +150,14 @@ class _PreviewModeControl extends StatelessWidget {
             children: [
               Text(
                 Localization.strings['jsonPreviewMode']!,
-                style: context.textTheme.bodyText2!
-                    .toBold()
-                    .withColor(primaryColor),
+                style: context.textTheme.bodyMedium!.toBold().withColor(primaryColor),
               ),
               SizeableTextButton(
                 onPressed: onPreviewPressed,
                 height: 34,
                 text: type,
-                style: context.textTheme.bodyText2!.toBold(),
-              )
+                style: context.textTheme.bodyMedium!.toBold(),
+              ),
             ],
           ),
         ),
@@ -201,7 +208,7 @@ class _ResponseTab extends StatelessWidget {
                 spreadRadius: 2,
                 blurRadius: 7,
                 offset: const Offset(0, 8),
-              )
+              ),
             ],
           ),
           child: _PreviewModeControl(
@@ -233,7 +240,7 @@ class _ResponseTab extends StatelessWidget {
           width: double.maxFinite,
           child: SelectableText(
             prettyJson,
-            style: context.textTheme.bodyText1,
+            style: context.textTheme.bodyLarge,
             textDirection: TextDirection.ltr,
           ),
         );
@@ -269,7 +276,7 @@ class _RequestTab extends StatelessWidget {
                 spreadRadius: 2,
                 blurRadius: 7,
                 offset: const Offset(0, 8),
-              )
+              ),
             ],
           ),
           child: _PreviewModeControl(
@@ -301,7 +308,7 @@ class _RequestTab extends StatelessWidget {
           width: double.maxFinite,
           child: SelectableText(
             prettyJson,
-            style: context.textTheme.bodyText1,
+            style: context.textTheme.bodyLarge,
             textDirection: TextDirection.ltr,
           ),
         );
