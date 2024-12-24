@@ -73,6 +73,7 @@ class ChuckerHttpClient extends BaseClient {
         statusCode: interceptedResponse.statusCode,
         path: interceptedRequest.url.path,
         requestTime: _requestTime,
+        storageManager: _storageManager,
       );
 
       await _saveResponse(
